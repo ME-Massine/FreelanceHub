@@ -16,7 +16,7 @@
         <div class="text-center">
             <h1 class="text-white display-4 fw-bold">Welcome to FreelanceHub, <br> The freelance marketplace for all
                 your needs</h1>
-            <button type="button" class="btn btn-primary mt-4 btn-lg">Become a Freelancer</button>
+            <a href="{% url 'signup' %}"><button type="button" class="btn btn-primary mt-4 btn-lg">Become a Freelancer</button></a>
         </div>
     </div>
 
@@ -156,7 +156,7 @@
     <div class="container-fluid bg-primary text-white text-center py-5" id="Ready">
         <h2 class="mb-4">Ready to Get Started?</h2>
         <p class="mb-4">Join thousands of freelancers and clients using FreelanceHub today.</p>
-        <button type="button" class="btn btn-light btn-lg shadow-lg">Sign Up Now</button>
+        <a href="{% url 'signup' %}"><button type="button" class="btn btn-light btn-lg shadow-lg">Sign Up Now</button></a>
     </div>
 
     <footer class="bg-dark text-white py-4">
