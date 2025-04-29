@@ -7,80 +7,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<style>
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+</style>
+
 <div class="min-vh-100 d-flex justify-content-center align-items-center bg-light">
-  <div class="card shadow-lg rounded-3" style="max-width: 450px; width: 100%;">
-    <div class="card-body p-4">
-      <h3 class="card-title text-center mb-4">Create Your FreelanceHub Account</h3>
+    <div class="card shadow-lg rounded-3" style="max-width: 700px; width: 100%;">
+        <div class="card-body p-4">
+            <h3 class="card-title text-center mb-4">Create Your FreelanceHub Account</h3>
 
-      <form method="post" action="{% url 'signup-form' %}">
-        {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <form method="post" action="">
+                {% csrf_token %}
 
-        <div class="form-floating mb-3">
-          <input 
-            type="text" 
-            class="form-control form-control-lg" 
-            id="floatingName" 
-            name="full_name" 
-            placeholder="Your Name" 
-            required>
-          <label for="floatingName">Full Name</label>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-lg" id="floatingFirstName"
+                                   name="first_name"
+                                   placeholder="Your First Name" required>
+                            <label for="floatingName">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-lg" id="floatingLastName"
+                                   name="last_name"
+                                   placeholder="Your Last Name" required>
+                            <label for="floatingName">Last Name</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <div class="col-md-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control form-control-lg" id="floatingUsername"
+                                   name="username" placeholder="Your Username" required>
+                            <label for="floatingUsername">Username</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-floating mb-3">
+                    <input
+                            type="password"
+                            class="form-control form-control-lg"
+                            id="floatingPassword1"
+                            name="password1"
+                            placeholder="Password"
+                            required>
+                    <label for="floatingPassword1">Password</label>
+                </div>
+
+                <div class="form-floating mb-4">
+                    <input
+                            type="password"
+                            class="form-control form-control-lg"
+                            id="floatingPassword2"
+                            name="password2"
+                            placeholder="Confirm Password"
+                            required>
+                    <label for="floatingPassword2">Confirm Password</label>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">Role</label>
+                    <select class="form-select" id="inputGroupSelect01" name="role" required>
+                        <option selected>Choose...</option>
+                        <option value="freelancer">Freelancer</option>
+                        <option value="client">Client</option>
+                    </select>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">Sign Up</button>
+            </form>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+                <p class="mb-0">Already have an account?
+                    <a href="{% url 'login' %}">Log in here</a>
+                </p>
+            </div>
         </div>
-        
-        <div class="form-floating mb-3">
-          <input 
-            type="email" 
-            class="form-control form-control-lg" 
-            id="floatingEmail" 
-            name="email" 
-            placeholder="name@example.com" 
-            required>
-          <label for="floatingEmail">Email address</label>
-        </div>
-
-        <div class="form-floating mb-3">
-          <input 
-            type="password" 
-            class="form-control form-control-lg" 
-            id="floatingPassword1" 
-            name="password1" 
-            placeholder="Password" 
-            required>
-          <label for="floatingPassword1">Password</label>
-        </div>
-
-        <div class="form-floating mb-4">
-          <input 
-            type="password" 
-            class="form-control form-control-lg" 
-            id="floatingPassword2" 
-            name="password2" 
-            placeholder="Confirm Password" 
-            required>
-          <label for="floatingPassword2">Confirm Password</label>
-        </div>
-
-        <div class="form-check mb-4">
-          <input class="form-check-input" type="checkbox" value="" id="termsCheck" name="terms" required>
-          <label class="form-check-label" for="termsCheck">
-            I agree to the <a href="">Terms &amp; Conditions</a>
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg w-100">Sign Up</button>
-      </form>
-
-      <hr class="my-4">
-
-      <div class="text-center">
-        <p class="mb-0">Already have an account? 
-          <a href="{% url 'login' %}">Log in here</a>
-        </p>
-      </div>
     </div>
-  </div>
 </div>
 </body>
 </html>

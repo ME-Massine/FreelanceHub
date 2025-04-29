@@ -15,19 +15,25 @@
   <div class="card shadow-lg rounded-3" style="max-width: 400px; width: 100%;">
     <div class="card-body p-4">
       <h3 class="card-title text-center mb-4">Login to FreelanceHub</h3>
-
+        {% if error is not None %}
+        <div class="alert alert-danger">
+                    <ul>
+                        <strong>{{ error.err }}</strong>
+                    </ul>
+        </div>
+        {% endif %}
       <form method="post" action="">
         {% csrf_token %}
 
         <div class="form-floating mb-3">
           <input
-            type="email"
+            type="text"
             class="form-control form-control-lg"
-            id="floatingEmail"
+            id="floatingUsername"
             name="username"
-            placeholder="name@example.com"
+            placeholder="username"
             required>
-          <label for="floatingEmail">Email address</label>
+          <label for="floatingUsername">Username</label>
         </div>
 
         <div class="form-floating mb-3">
