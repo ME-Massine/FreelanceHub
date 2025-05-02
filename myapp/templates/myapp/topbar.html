@@ -8,10 +8,10 @@
         </button>
 
         {% if not minimal_nav %}
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Explore</a>
+                    <a class="nav-link" href="{% url 'dashboard' %}">Explore</a>
                 </li>
 
                 <!-- Categories dropdown starts here -->
@@ -35,21 +35,31 @@
                     <a class="nav-link" href="#how">How it Works</a>
                 </li>
             </ul>
-            <ul class="navbar-nav">
-                <!-- Profile Picture -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{% static 'images/default_profile.jpg' %}" alt="Profile" class="rounded-circle" width="36" height="36">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                        <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                   id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1746195048~exp=1746198648~hmac=638e192329dd951229828bde5bb7891db384b1bcd2496af3ce4f18f6b3ba624f&w=740"
+                         alt="profile"
+                         class="rounded-circle"
+                         style="width: 40px; height: 40px; object-fit: cover;">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" href="">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item text-danger">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
+        {% endif %}
         </div>
         {% endif %}
     </div>

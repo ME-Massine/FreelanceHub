@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from myapp.forms import SignupForm
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -17,7 +18,16 @@ def login_view(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            return redirect('clientPage')
+            user_group = request.user.groups.first()
+
+            if user_group:
+                if user_group.name == "freelancer":
+                    return redirect('dashboard')
+                elif user_group.name == "client":
+                    return redirect('clientPage')
+
+            return redirect('dashboard')
+
         else:
             error={"err" :  "Invalid username or password."}
             return render(request, 'login.html', {'error':error})
@@ -32,7 +42,7 @@ def signup(request):
         if form.is_valid() and role in ['freelancer', 'client']:
             user = form.save(commit=False)
             user.save()
-            group = Group.objects.get(name=role.capitalize())
+            group = Group.objects.get(name=role)
             user.groups.add(group)
 
             login(request, user)
@@ -44,9 +54,14 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
-
+@login_required
 def dashboard(request):
-    return render(request, 'myapp/dashboard.html')
+    name = request.user.username
+    return render(request, 'myapp/dashboard.html', {'name': name})
+
+
+def settings(request):
+    return render(request, 'myapp/settings.html')
 
 
 def clientpage(request):
