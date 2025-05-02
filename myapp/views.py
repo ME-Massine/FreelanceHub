@@ -37,10 +37,13 @@ def signup(request):
 
             login(request, user)
             messages.success(request, f"Account created successfully as a {role}.")
-            return redirect('home')
+            return redirect('login')
         else:
             messages.error(request, "Please complete the form correctly.")
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
+
+def dashboard(request):
+    return render(request, 'myapp/dashboard.html')

@@ -1,43 +1,50 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm position-sticky top-0" style="z-index: 1030;">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">FreelanceHub</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-              aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Explore</a>
-          </li>
+        <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">FreelanceHub</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-          <!-- Categories dropdown starts here -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button"
-               data-bs-toggle="dropdown" aria-expanded="false">
-              Categories
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
-              <li><a class="dropdown-item" href="#">Development</a></li>
-              <li><a class="dropdown-item" href="#">Design</a></li>
-              <li><a class="dropdown-item" href="#">Writing</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">All Categories</a></li>
+        {% if not minimal_nav %}
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+
+                <!-- Categories dropdown starts here -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Categories
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                        <li><a class="dropdown-item" href="#">Development</a></li>
+                        <li><a class="dropdown-item" href="#">Design</a></li>
+                        <li><a class="dropdown-item" href="#">Writing</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">All Categories</a></li>
+                    </ul>
+                </li>
+                <!-- Categories dropdown ends here -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#how">How it Works</a>
+                </li>
             </ul>
-          </li>
-          <!-- Categories dropdown ends here -->
-          <li class="nav-item">
-            <a class="nav-link" href="#how">How it Works</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item me-3"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-          <li class="nav-item dropdown">
-              <a href="{% url 'signup' %}"><button type="button" class="btn btn-primary">Sign up</button></a>
+            <ul class="navbar-nav">
+                <li class="nav-item me-3"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item dropdown">
+                    <a href="{% url 'signup' %}">
+                        <button type="button" class="btn btn-primary">Sign up</button>
+                    </a>
 
-          </li>
-        </ul>
-      </div>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
     </div>
-  </nav>
+</nav>
