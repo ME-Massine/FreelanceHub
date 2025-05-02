@@ -17,7 +17,7 @@ def login_view(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            return redirect('home')
+            return redirect('clientPage')
         else:
             error={"err" :  "Invalid username or password."}
             return render(request, 'login.html', {'error':error})
@@ -47,3 +47,7 @@ def signup(request):
 
 def dashboard(request):
     return render(request, 'myapp/dashboard.html')
+
+
+def clientpage(request):
+    return render(request, 'clientPage.html')
