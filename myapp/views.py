@@ -18,6 +18,7 @@ def login_view(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
+            login(request, user)
             user_group = request.user.groups.first()
 
             if user_group:

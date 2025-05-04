@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="Merge branch 'master' of https://github.com/ME-Massine/FreelanceHub into branch1&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;ProjetPython/urls.py&#10;#&#9;db.sqlite3&#10;#&#9;myapp/views.py">
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/settings.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/topbar.html" afterDir="false" />
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="gestion des roles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetPython/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/ClientNavbar.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/clientPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/clientPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/page.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +126,7 @@
       <workItem from="1745951295224" duration="6467000" />
       <workItem from="1746188338270" duration="3072000" />
       <workItem from="1746217103768" duration="2530000" />
+      <workItem from="1746378840344" duration="582000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -169,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746219697485</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="gestion des roles">
+      <option name="closed" value="true" />
+      <created>1746222551211</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746222551211</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,6 +196,7 @@
     <MESSAGE value="fixed the signup page" />
     <MESSAGE value="adding signup form functionality" />
     <MESSAGE value="test" />
-    <option name="LAST_COMMIT_MESSAGE" value="test" />
+    <MESSAGE value="gestion des roles" />
+    <option name="LAST_COMMIT_MESSAGE" value="gestion des roles" />
   </component>
 </project>
