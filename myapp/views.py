@@ -76,4 +76,7 @@ def settings(request):
 
 @login_required
 def clientpage(request):
-    return render(request, 'myapp/clientPage.html')
+    card={'1':'amine','2':'massine' ,'3':'anass','4':'anass','5':'anass','7':'anass'}
+    return render(request, 'myapp/clientPage.html', {'card': card})
+
+
