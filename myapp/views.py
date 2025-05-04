@@ -76,4 +76,4 @@ def settings(request):
 
 @login_required
 def clientpage(request):
-    return render(request, 'clientPage.html')
+    return render(request, 'myapp/clientPage.html')
