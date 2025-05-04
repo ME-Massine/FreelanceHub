@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from myapp.forms import SignupForm
 from django.contrib.auth.decorators import login_required
@@ -55,6 +55,15 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
+
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
+
+    return redirect('clientPage')
+
 @login_required
 def dashboard(request):
     name = request.user.username
@@ -65,5 +74,6 @@ def settings(request):
     return render(request, 'myapp/settings.html')
 
 
+@login_required
 def clientpage(request):
     return render(request, 'clientPage.html')
