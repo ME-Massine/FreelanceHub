@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from myapp.forms import SignupForm
+from client.forms import SignupForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -67,13 +67,16 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     name = request.user.username
-    return render(request, 'myapp/dashboard.html', {'name': name})
+    return render(request, 'client/../freelancer/templates/freelancer/dashboard.html', {'name': name})
 
 
 def settings(request):
-    return render(request, 'myapp/settings.html')
+    return render(request, 'client/settings.html')
 
 
 @login_required
 def clientpage(request):
-    return render(request, 'clientPage.html')
+    card={'1':'amine','2':'massine' ,'3':'anass','4':'anass','5':'anass','7':'anass'}
+    return render(request, 'client/clientPage.html', {'card': card})
+
+
