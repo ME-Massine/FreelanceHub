@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'client',
     'freelancer',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
