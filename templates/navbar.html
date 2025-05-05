@@ -55,11 +55,13 @@
                             </li>
                         </ul>
                     {% else %}
-                        <form class="d-flex me-4" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                                   style="width: 250px;">
-                            <button class="btn btn-outline-primary" type="submit">Search</button>
-                        </form>
+                        {% if search %}
+                            <form class="d-flex me-4" role="search">
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                                       style="width: 250px;">
+                                <button class="btn btn-outline-primary" type="submit">Search</button>
+                            </form>
+                        {% endif %}
 
                         <div class="dropdown ms-2">
                             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
@@ -70,8 +72,15 @@
                                      style="width: 40px; height: 40px; object-fit: cover;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                <li><a class="dropdown-item" href="#">View Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url 'freelancer:settings' %}">Settings</a></li>
+                                {% if client %}
+                                    <li><a class="dropdown-item" href="{% url 'client:profile' %}">View Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'client:settings' %}">Settings</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'freelancer:profile' %}">View Profile</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'freelancer:settings' %}">Settings</a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
