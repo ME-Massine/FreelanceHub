@@ -64,12 +64,6 @@ def logout_view(request):
 
     return redirect('clientPage')
 
-@login_required
-def dashboard(request):
-    name = request.user.username
-    return render(request, 'client/../freelancer/templates/freelancer/dashboard.html', {'name': name})
-
-
 def settings(request):
     return render(request, 'client/settings.html')
 
