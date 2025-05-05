@@ -23,11 +23,11 @@ def login_view(request):
 
             if user_group:
                 if user_group.name == "freelancer":
-                    return redirect('dashboard')
+                    return redirect('freelancer:dashboard')
                 elif user_group.name == "client":
                     return redirect('clientPage')
 
-            return redirect('dashboard')
+            return redirect('freelancer:dashboard')
 
         else:
             error={"err" :  "Invalid username or password."}
@@ -67,10 +67,7 @@ def logout_view(request):
 def settings(request):
     return render(request, 'client/settings.html')
 
-
-@login_required
 def clientpage(request):
-    card={'1':'amine','2':'massine' ,'3':'anass','4':'anass','5':'anass','7':'anass'}
-    return render(request, 'client/clientPage.html', {'card': card})
+    return render(request, 'client/clientPage.html')
 
 
