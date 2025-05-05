@@ -4,30 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="added models (service,client,freelancer)">
-      <change afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/settings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ProjetPython.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetPython.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="split the project into 2 apps (client, freelancer)">
+      <change afterPath="$PROJECT_DIR$/client/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/freelancer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetPython/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetPython/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/forms.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/clientPage.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/settings.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/topbar.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/templates/client/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/templates/client/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
     </list>
-    <list id="7feb201c-afb4-474d-b8fe-cc1e4df8692a" name="Changes by mouss" comment="" />
+    <list id="7feb201c-afb4-474d-b8fe-cc1e4df8692a" name="Changes by mouss" comment="">
+      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,8 +29,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -63,6 +53,16 @@
   "selectedUrlAndAccountId": {
     "url": "https://github.com/ME-Massine/FreelanceHub.git",
     "accountId": "2f4249f0-e9e1-4c93-a3fd-5b3db98dded0"
+  },
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
+    },
+    "owner": "ME-Massine",
+    "repository": "FreelanceHub"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -88,7 +88,7 @@
     "django.template.preview.state": "SHOW_EDITOR",
     "git-widget-placeholder": "branch1",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/MSI/Desktop/Projet/freelancer/templates/freelancer",
+    "last_opened_file_path": "C:/Users/MSI/Desktop/Projet/client",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -100,6 +100,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\MSI\Desktop\Projet\client" />
       <recent name="C:\Users\MSI\Desktop\Projet\freelancer\templates\freelancer" />
       <recent name="C:\Users\Administrateur\PycharmProjects\ProjetPython\templates" />
     </key>
@@ -159,7 +160,7 @@
       <workItem from="1746378840344" duration="9752000" />
       <workItem from="1746388742995" duration="503000" />
       <workItem from="1746464782173" duration="452000" />
-      <workItem from="1746468968614" duration="244000" />
+      <workItem from="1746468968614" duration="2791000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -233,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746389245326</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="split the project into 2 apps (client, freelancer)">
+      <option name="closed" value="true" />
+      <created>1746469414589</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1746469414589</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -248,6 +257,17 @@
               <option name="CUSTOM_BOOLEAN_PROPERTIES">
                 <map>
                   <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
                 </map>
               </option>
             </State>
@@ -265,7 +285,9 @@
     <MESSAGE value="adding login function" />
     <MESSAGE value="added logout functionality" />
     <MESSAGE value="some fixes In the navBar" />
+    <MESSAGE value="migration" />
     <MESSAGE value="added models (service,client,freelancer)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added models (service,client,freelancer)" />
+    <MESSAGE value="split the project into 2 apps (client, freelancer)" />
+    <option name="LAST_COMMIT_MESSAGE" value="split the project into 2 apps (client, freelancer)" />
   </component>
 </project>
