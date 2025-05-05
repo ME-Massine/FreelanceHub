@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="added models (service,client,freelancer)">
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="migration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,9 +96,8 @@
         <env name="DJANGO_SETTINGS_MODULE" value="ProjetPython.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.13 (FreelanceHub)" />
       <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
@@ -135,7 +135,7 @@
       <workItem from="1746217103768" duration="2530000" />
       <workItem from="1746378840344" duration="9752000" />
       <workItem from="1746388742995" duration="503000" />
-      <workItem from="1746464782173" duration="452000" />
+      <workItem from="1746464782173" duration="2715000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -209,7 +209,23 @@
       <option name="project" value="LOCAL" />
       <updated>1746389245326</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="test">
+      <option name="closed" value="true" />
+      <created>1746465479262</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1746465479262</updated>
+    </task>
+    <task id="LOCAL-00011" summary="migration">
+      <option name="closed" value="true" />
+      <created>1746465616988</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1746465616988</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,12 +252,13 @@
     <MESSAGE value="Added pages" />
     <MESSAGE value="fixed the signup page" />
     <MESSAGE value="adding signup form functionality" />
-    <MESSAGE value="test" />
     <MESSAGE value="gestion des roles" />
     <MESSAGE value="adding login function" />
     <MESSAGE value="added logout functionality" />
     <MESSAGE value="some fixes In the navBar" />
     <MESSAGE value="added models (service,client,freelancer)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added models (service,client,freelancer)" />
+    <MESSAGE value="test" />
+    <MESSAGE value="migration" />
+    <option name="LAST_COMMIT_MESSAGE" value="migration" />
   </component>
 </project>
