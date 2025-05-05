@@ -70,4 +70,5 @@ def settings(request):
 def clientpage(request):
     return render(request, 'client/clientPage.html')
 
-
+def profile(request):
+    return render(request, 'client/profile.html')

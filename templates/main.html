@@ -16,7 +16,7 @@
 </head>
 <body>
     {% block nav %}
-        {% include 'navbar.html' with minimal_nav=False logged_in=False %}
+        {% include 'navbar.html' with minimal_nav=False logged_in=False search=False client=False %}
     {% endblock %}
 <main>
     {% block content %}{% endblock %}
