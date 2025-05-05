@@ -4,9 +4,10 @@ from django.db import models
 # Create your models here.
 class Freelancer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField()
+    bio = models.TextField(blank=True, default='No Bio Available')
     portfolio_url = models.URLField(blank=True)
-    rating = models.FloatField(default=0.0)
+    rating = models.FloatField(default=0.0, max_length=2)
+    location = models.CharField(max_length=100, blank=True)
 
 
 class Service(models.Model):
