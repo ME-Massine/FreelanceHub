@@ -25,7 +25,7 @@ def login_view(request):
                 if user_group.name == "freelancer":
                     return redirect('freelancer:dashboard')
                 elif user_group.name == "client":
-                    return redirect('clientPage')
+                    return redirect('client:clientPage')
 
             return redirect('freelancer:dashboard')
 
@@ -48,7 +48,7 @@ def signup(request):
 
             login(request, user)
             messages.success(request, f"Account created successfully as a {role}.")
-            return redirect('login')
+            return redirect('client:login')
         else:
             messages.error(request, "Please complete the form correctly.")
     else:
@@ -68,7 +68,8 @@ def settings(request):
     return render(request, 'client/settings.html')
 
 def clientpage(request):
-    return render(request, 'client/clientPage.html')
+    card=range(1,9)
+    return render(request, 'client/clientPage.html',{'card':card})
 
 def profile(request):
     return render(request, 'client/profile.html')

@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="added profile" />
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="added profile">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+    </list>
     <list id="7feb201c-afb4-474d-b8fe-cc1e4df8692a" name="Changes by mouss" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,22 +41,22 @@
     &quot;assignee&quot;: &quot;ME-Massine&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ME-Massine/FreelanceHub.git&quot;,
-    &quot;accountId&quot;: &quot;2f4249f0-e9e1-4c93-a3fd-5b3db98dded0&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ME-Massine/FreelanceHub.git",
+    "accountId": "61dbb79a-2d14-49cc-bf63-61f659208117"
   },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
     },
-    &quot;owner&quot;: &quot;ME-Massine&quot;,
-    &quot;repository&quot;: &quot;FreelanceHub&quot;
+    "owner": "ME-Massine",
+    "repository": "FreelanceHub"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -150,6 +154,7 @@
       <workItem from="1746388742995" duration="503000" />
       <workItem from="1746464782173" duration="452000" />
       <workItem from="1746468968614" duration="2791000" />
+      <workItem from="1746631975061" duration="554000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
