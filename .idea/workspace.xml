@@ -4,29 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="added profile">
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="adding login function">
       <change beforePath="$PROJECT_DIR$/.idea/ProjetPython.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetPython.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetPython/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/templates/client/clientPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/templates/client/clientPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
     </list>
-    <list id="7feb201c-afb4-474d-b8fe-cc1e4df8692a" name="Changes by mouss" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
-    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -37,7 +32,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -49,16 +43,6 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ME-Massine/FreelanceHub.git&quot;,
     &quot;accountId&quot;: &quot;61dbb79a-2d14-49cc-bf63-61f659208117&quot;
-  },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
-    },
-    &quot;owner&quot;: &quot;ME-Massine&quot;,
-    &quot;repository&quot;: &quot;FreelanceHub&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -84,25 +68,18 @@
     "django.template.preview.state": "SHOW_EDITOR",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/MSI/Desktop/Projet/client",
+    "last_opened_file_path": "C:/Users/Administrateur/PycharmProjects/ProjetPython/templates",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "CodeWithMe",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\MSI\Desktop\Projet\client" />
-      <recent name="C:\Users\MSI\Desktop\Projet\freelancer\templates\freelancer" />
       <recent name="C:\Users\Administrateur\PycharmProjects\ProjetPython\templates" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\MSI\Desktop\Projet\freelancer\templates\freelancer" />
-      <recent name="C:\Users\mouss\IdeaProjects\FreelanceHub\myapp\templates\myapp" />
     </key>
   </component>
   <component name="RunManager">
@@ -116,7 +93,6 @@
         <env name="DJANGO_SETTINGS_MODULE" value="ProjetPython.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (ProjetPython)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -154,11 +130,7 @@
       <workItem from="1745951295224" duration="6467000" />
       <workItem from="1746188338270" duration="3072000" />
       <workItem from="1746217103768" duration="2530000" />
-      <workItem from="1746378840344" duration="9752000" />
-      <workItem from="1746388742995" duration="503000" />
-      <workItem from="1746464782173" duration="452000" />
-      <workItem from="1746468968614" duration="2791000" />
-      <workItem from="1746631975061" duration="554000" />
+      <workItem from="1746378840344" duration="1900000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -208,71 +180,7 @@
       <option name="project" value="LOCAL" />
       <updated>1746379511067</updated>
     </task>
-    <task id="LOCAL-00007" summary="added logout functionality">
-      <option name="closed" value="true" />
-      <created>1746380889875</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1746380889875</updated>
-    </task>
-    <task id="LOCAL-00008" summary="some fixes In the navBar">
-      <option name="closed" value="true" />
-      <created>1746383702114</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1746383702114</updated>
-    </task>
-    <task id="LOCAL-00009" summary="added models (service,client,freelancer)">
-      <option name="closed" value="true" />
-      <created>1746389245326</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1746389245326</updated>
-    </task>
-    <task id="LOCAL-00010" summary="split the project into 2 apps (client, freelancer)">
-      <option name="closed" value="true" />
-      <created>1746469414589</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1746469414589</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Changes by MSI">
-      <option name="closed" value="true" />
-      <created>1746473404357</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1746473404357</updated>
-    </task>
-    <task id="LOCAL-00012" summary="updated urls">
-      <option name="closed" value="true" />
-      <created>1746473698007</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1746473698007</updated>
-    </task>
-    <task id="LOCAL-00013" summary="added profile">
-      <option name="closed" value="true" />
-      <created>1746476767841</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1746476767841</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Fetching and displaying freelancers data from db">
-      <option name="closed" value="true" />
-      <created>1746481350457</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1746481350457</updated>
-    </task>
-    <option name="localTasksCounter" value="15" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,17 +197,6 @@
                   <entry key="Show.Git.Branches" value="true" />
                 </map>
               </option>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="branch1" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
             </State>
           </value>
         </entry>
@@ -313,15 +210,6 @@
     <MESSAGE value="test" />
     <MESSAGE value="gestion des roles" />
     <MESSAGE value="adding login function" />
-    <MESSAGE value="added logout functionality" />
-    <MESSAGE value="some fixes In the navBar" />
-    <MESSAGE value="migration" />
-    <MESSAGE value="added models (service,client,freelancer)" />
-    <MESSAGE value="split the project into 2 apps (client, freelancer)" />
-    <MESSAGE value="updated urls" />
-    <MESSAGE value="added profile" />
-    <MESSAGE value="Changes by MSI" />
-    <MESSAGE value="Fetching and displaying freelancers data from db" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fetching and displaying freelancers data from db" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding login function" />
   </component>
 </project>
