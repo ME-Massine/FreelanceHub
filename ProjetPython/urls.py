@@ -25,6 +25,6 @@ urlpatterns = [
     path('freelancer/', include(('freelancer.urls', 'freelancer'), namespace='freelancer')),
 
     path('', views.home, name='home'),
-
+    
 
 ]

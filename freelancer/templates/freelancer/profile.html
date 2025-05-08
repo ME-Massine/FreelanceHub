@@ -5,84 +5,88 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
 
-            <div class="card shadow rounded p-4">
-                <div class="row">
+                <div class="card shadow rounded p-4">
+                    <div class="row">
 
-                    <!-- Left Column: Profile Image & Basic Info -->
-                    <div class="col-md-4 text-center border-end">
+                        <!-- Left Column: Profile Image & Basic Info -->
+                        <div class="col-md-4 text-center border-end">
 
-                        <img src="https://placehold.co/150x150" alt="Profile Image"
-                             class="rounded-circle mb-3" style="width: 150px; height: 150px;">
-                        <div class="mb-2 text-muted">
-                            <i class="bi bi-geo-alt-fill me-1"></i>
-                            {{ freelancerinfo.location|default:"Unknown Location" }}
+                            <img src="https://placehold.co/150x150" alt="Profile Image"
+                                 class="rounded-circle mb-3" style="width: 150px; height: 150px;">
+                            <div class="mb-2 text-muted">
+                                <i class="bi bi-geo-alt-fill me-1"></i>
+                                {{ freelancerinfo.location|default:"Unknown Location" }}
+                            </div>
+                            <h4>{{ freelancerinfo.user.username|default:user.username }}</h4>
+                            <div class="mb-2 text-warning">
+                                {% for i in fullstar %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% endfor %}
+                                {% if halfstar %}
+                                    <i class="bi bi-star-half"></i>
+                                {% endif %}
+
+                                {% for i in emptystar %}
+                                    <i class="bi bi-star"></i>
+                                {% endfor %}
+                                <span class="text-muted ms-1">({{ freelancerinfo.rating }})</span>
+                            </div>
+                            <p class="text-muted">simo@gmail.com</p>
+                            <a href="{% url 'freelancer:settings' %}" class="btn btn-outline-primary mt-2">Edit
+                                Profile</a>
                         </div>
-                        <h4>{{ freelancerinfo.user.username|default:user.username }}</h4>
-                        <div class="mb-2 text-warning">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                            <i class="bi bi-star"></i>
-                            <span class="text-muted ms-1">(4.5)</span>
-                        </div>
-                        <p class="text-muted">simo@gmail.com</p>
-                        <a href="{% url 'freelancer:settings' %}" class="btn btn-outline-primary mt-2">Edit
-                            Profile</a>
-                    </div>
 
-                    <!-- Right Column: Bio & Details -->
-                    <div class="col-md-8">
-                        <h5 class="mb-3">About Me</h5>
-                        <p class="text-muted mx-4">
+                        <!-- Right Column: Bio & Details -->
+                        <div class="col-md-8">
+                            <h5 class="mb-3">About Me</h5>
+                            <p class="text-muted mx-4">
 
-                            {{ freelancerinfo.bio|default:"No bio provided." }}
+                                {{ freelancerinfo.bio|default:"No bio provided." }}
 
-                        </p>
-                        <hr>
-                        <h5 class="mb-3">Languages</h5>
-                        <p class="text-muted mx-4">
+                            </p>
+                            <hr>
+                            <h5 class="mb-3">Languages</h5>
+                            <p class="text-muted mx-4">
+                                {% if user.freelancerprofile %}
+                                    {{ user.freelancerprofile.bio|default:"No bio provided." }}
+                                {% elif user.clientprofile %}
+                                    {{ user.clientprofile.bio|default:"No bio provided." }}
+                                {% else %}
+
+                                    <ul>
+                                        <li>English <strong>(begginer)</strong></li>
+                                        <br>
+                                        <li>Arabic <strong>(moderate)</strong></li>
+                                        <br>
+                                        <li>French <strong>(fluent)</strong></li>
+                                        <br>
+                                        <li>Tarifit <strong>(very fluent)</strong></li>
+                                    </ul>
+                                {% endif %}
+                            </p>
+
+                            <hr>
+
                             {% if user.freelancerprofile %}
-                                {{ user.freelancerprofile.bio|default:"No bio provided." }}
+                                <h6><strong>Skills:</strong> {{ user.freelancerprofile.skills }}</h6>
+                                <h6><strong>Portfolio:</strong> <a href="{{ user.freelancerprofile.portfolio_url }}"
+                                                                   target="_blank">View</a></h6>
+                                <h6><strong>Rating:</strong> ⭐ {{ user.freelancerprofile.rating }}</h6>
                             {% elif user.clientprofile %}
-                                {{ user.clientprofile.bio|default:"No bio provided." }}
-                            {% else %}
-
-                                <ul>
-
-                                    <li>English <strong>(begginer)</strong></li>
-                                    <br>
-                                    <li>Arabic <strong>(moderate)</strong></li>
-                                    <br>
-                                    <li>French <strong>(fluent)</strong></li>
-                                    <br>
-                                    <li>Tarifit <strong>(very fluent)</strong></li>
-                                </ul>
+                                <h6><strong>Company:</strong> {{ user.clientprofile.company_name }}</h6>
+                                <h6><strong>Phone:</strong> {{ user.clientprofile.phone_number }}</h6>
+                                <h6><strong>Address:</strong> {{ user.clientprofile.address }}</h6>
                             {% endif %}
-                        </p>
+                        </div>
 
-                        <hr>
-
-                        {% if user.freelancerprofile %}
-                            <h6><strong>Skills:</strong> {{ user.freelancerprofile.skills }}</h6>
-                            <h6><strong>Portfolio:</strong> <a href="{{ user.freelancerprofile.portfolio_url }}"
-                                                               target="_blank">View</a></h6>
-                            <h6><strong>Rating:</strong> ⭐ {{ user.freelancerprofile.rating }}</h6>
-                        {% elif user.clientprofile %}
-                            <h6><strong>Company:</strong> {{ user.clientprofile.company_name }}</h6>
-                            <h6><strong>Phone:</strong> {{ user.clientprofile.phone_number }}</h6>
-                            <h6><strong>Address:</strong> {{ user.clientprofile.address }}</h6>
-                        {% endif %}
                     </div>
-
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
