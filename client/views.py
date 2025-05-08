@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from client.forms import SignupForm
-from freelancer.models import *
 from django.contrib.auth.decorators import login_required
+
+from freelancer.models import *
 
 
 # Create your views here.
@@ -69,8 +70,8 @@ def settings(request):
     return render(request, 'client/settings.html')
 
 def clientpage(request):
-    freelancer=Service.objects.all()
-    return render(request, 'client/clientPage.html',{'freelancer':freelancer})
+    freelancer = Service.objects.all()
+    return render(request, 'client/clientPage.html', {'freelancer': freelancer})
 
 def profile(request):
     return render(request, 'client/profile.html')
