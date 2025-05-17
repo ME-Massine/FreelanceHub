@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.functional import empty
 
+from client.models import Mission
 from .models import Freelancer, Service
 
 
@@ -23,8 +24,16 @@ def settings(request):
 
 @login_required
 def dashboard(request):
-    name = request.user.username
-    return render(request, 'freelancer/dashboard.html', {'name': name})
+    missions = Mission.objects.all()
+    count = Mission.objects.count()
+
+    level_colors = {
+        'beginner': 'bg-success',
+        'intermediate': 'bg-warning text-dark',
+        'expert': 'bg-danger',
+    }
+
+    return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
 
 
 @login_required
