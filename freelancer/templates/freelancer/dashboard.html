@@ -6,8 +6,29 @@
 
 {% block content %}
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl);
+            });
+        });
+    </script>
+    <style>
+        .custom-popover {
+            --bs-popover-max-width: 220px;
+            --bs-popover-border-color: #6f42c1;
+            --bs-popover-header-bg: #6f42c1;
+            --bs-popover-header-color: #fff;
+            --bs-popover-body-padding-x: 1rem;
+            --bs-popover-body-padding-y: .5rem;
+            --bs-popover-bg:#fff;
+        }
+    </style>
+
+
     <div class="container mt-4">
-        <h4 class="mb-3">
+        <h4 class="mb-4">
             <span class="badge bg-secondary">{{ count }}</span> Results
         </h4>
 
@@ -23,9 +44,22 @@
                         <div class="card-body pt-4">
                             <h5 class="card-title">{{ m.title }}</h5>
                             <p class="card-text">{{ m.description }}</p>
-                            <a href="">
-                                <h6 class="card-subtitle mb-2 text-body-secondary">@{{ m.client.user.username }}</h6>
-                            </a>
+
+
+                            <span tabindex="0"
+                                  role="button"
+                                  data-bs-toggle="popover"
+                                  data-bs-trigger="focus"
+                                  data-bs-html="true"
+                                  data-bs-title="Contact Info"
+                                  data-bs-custom-class="custom-popover"
+                                  data-bs-content="<strong>Phone:</strong> {{ m.client.phone_number }}<br><strong>Company:</strong> {{ m.client.company_name }}"
+                                  class="text-purple fw-semibold"
+                                  style="cursor: pointer;">
+                                @{{ m.client.user.username }}
+                            </span>
+
+
                             <h5 class="text-success fw-bold">{{ m.price }}$/hour</h5>
                             <div class="d-inline-block px-3 py-1 mt-2 text-muted bg-light rounded-pill"
                                  style="background-color: #e0e0e0;">
