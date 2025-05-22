@@ -1,13 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django_countries.fields import CountryField
 
 
 # Create your models here.
 class Client(models.Model):
+    COUNTRY_CHOICES = [
+
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255, default='not provided')
     phone_number = models.CharField(max_length=20, default='not provided')
-    address = models.TextField(blank=True)
+    country = CountryField(default='MA',blank=True, null=True)
 
 
 class Mission(models.Model):
@@ -42,4 +46,11 @@ class Mission(models.Model):
             'intermediate': 'bg-warning text-dark',
             'expert': 'bg-danger',
         }.get(self.level, 'bg-secondary')
+
+class Application(models.Model):
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='applications')
+
+    applicant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applicant')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 

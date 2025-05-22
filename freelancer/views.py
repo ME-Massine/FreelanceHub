@@ -1,12 +1,12 @@
 import math
-
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.functional import empty
 
-from client.models import Mission
+from client.models import Mission, Application
 from .models import Freelancer, Service
+
+from .forms import ApplicationForm
 
 
 # Create your views here.
@@ -34,6 +34,24 @@ def dashboard(request):
     }
 
     return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
+
+
+@login_required
+def mission_detail(request, pk):
+    mission = get_object_or_404(Mission, pk=pk)
+    applications = Application.objects.filter(mission=pk)
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.mission = mission
+            application.applicant = request.user
+            application.save()
+            return redirect('freelancer:mission_detail', pk=mission.id)
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'freelancer/mission_detail.html', {'mission': mission, 'applications': applications})
 
 
 @login_required

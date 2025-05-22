@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'client',
     'freelancer',
+    'django_countries',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

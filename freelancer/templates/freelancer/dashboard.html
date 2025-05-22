@@ -43,7 +43,7 @@
 
                         <div class="card-body pt-4">
                             <h5 class="card-title">{{ m.title }}</h5>
-                            <p class="card-text">{{ m.description }}</p>
+                            <p class="card-text">{{ m.description|truncatewords:10 }}</p>
 
 
                             <span tabindex="0"
@@ -66,7 +66,7 @@
                                 {{ m.get_category_display }}
                             </div>
                             <div class="d-flex justify-content-end mt-3">
-                                <a href="#" class="btn btn-primary">Apply now</a>
+                                <a href="{% url 'freelancer:mission_detail' m.pk %}" class="btn btn-primary">Apply now</a>
                             </div>
                         </div>
                     </div>
