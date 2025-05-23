@@ -35,8 +35,54 @@
                                 <span class="text-muted ms-1">({{ freelancerinfo.rating }})</span>
                             </div>
                             <p class="text-muted">simo@gmail.com</p>
-                            <a href="{% url 'freelancer:settings' %}" class="btn btn-outline-primary mt-2">Edit
-                                Profile</a>
+                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+                               aria-controls="offcanvasExample">
+                                Edit profile
+                            </a>
+                            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+                                 aria-labelledby="offcanvasExampleLabel">
+                                <div class="offcanvas-header">
+                                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+
+                                        {% if form %}
+                                            <!-- Location -->
+                                            <div class="mb-3">
+                                                <label for="id_location" class="form-label">Location</label>
+                                                {{ form.location }}
+                                            </div>
+
+                                            <!-- Bio -->
+                                            <div class="mb-3">
+                                                <label for="id_bio" class="form-label">Bio</label>
+                                                {{ form.bio }}
+                                            </div>
+
+                                            <!-- Portfolio -->
+                                            <div class="mb-3">
+                                                <label for="id_portfolio_url" class="form-label">Portfolio URL</label>
+                                                {{ form.portfolio_url }}
+                                            </div>
+
+                                            <!-- Languages -->
+                                            <div class="mb-3">
+                                                <label for="id_Languages" class="form-label">Languages</label>
+                                                {{ form.Languages }}
+                                            </div>
+
+
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        {% else %}
+                                            <p>No form available.</p>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Right Column: Bio & Details -->

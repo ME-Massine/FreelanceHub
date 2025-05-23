@@ -5,9 +5,6 @@ from django_countries.fields import CountryField
 
 # Create your models here.
 class Client(models.Model):
-    COUNTRY_CHOICES = [
-
-    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255, default='not provided')
     phone_number = models.CharField(max_length=20, default='not provided')

@@ -48,12 +48,12 @@
 
                 {% for a in applications %}
                     <div class="d-flex mb-4">
-                        <img class="rounded-circle shadow-sm" src="{{ a.applicant.profile_picture.url }}" alt="avatar">
+                        <img class="rounded-circle shadow-sm" src="{{ a.applicant.profile }}" alt="avatar">
 
                         <div class="ms-3 flex-grow-1">
                             <div class="bg-light rounded px-3 py-2 shadow-sm">
                                 <div class="d-flex justify-content-between">
-                                    <strong>@{{ a.applicant}}</strong>
+                                    <strong>@{{ a.applicant }}</strong>
                                     <small class="text-muted">{{ a.created_at|naturaltime }}</small>
                                 </div>
                                 <p class="mb-1 mt-1">&emsp;&emsp;{{ a.content }}</p>
@@ -69,6 +69,11 @@
                 <form method="POST" action="" class="mb-4">
                     {% csrf_token %}
                     <div class="form-group">
+                        {% if err %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ err }}
+                        </div>
+                        {% endif %}
                         <label for="commentTextarea" class="form-label">Application Message</label>
                         <textarea class="form-control" id="commentTextarea" name="content" rows="3"
                                   placeholder="Write your application message..."></textarea>

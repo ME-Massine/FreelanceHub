@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'freelancer',
     'django_countries',
     'django.contrib.humanize',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
