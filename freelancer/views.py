@@ -85,21 +85,18 @@ def profile_edit(request):
     freelancerinfo = get_object_or_404(Freelancer, user=request.user)
     post_data = request.POST.copy()
 
-    # Handle languages: convert from comma-separated string to list
-    languages_raw = post_data.get('languages', '')
-    if languages_raw:
-        lang_list = [lang.strip() for lang in languages_raw.split(',') if lang.strip()]
-        post_data.setlist('languages', lang_list)
-    else:
-        post_data.setlist('languages', [])
+    # Use getlist to get all language codes submitted (from hidden inputs)
+    lang_list = post_data.getlist('languages')
+
+    # Set the languages list in post_data correctly
+    post_data.setlist('languages', lang_list)
 
     form = ProfileForm(post_data, instance=freelancerinfo)
     if form.is_valid():
         form.save()
         return redirect('freelancer:profile')
     else:
-        print("Form initial data:", form.initial)
-        print("Form cleaned data (if valid):", form.cleaned_data if form.is_valid() else "Invalid form")
+        print("Form errors:", form.errors)
         return render(request, 'freelancer/profileF.html', {
             'freelancerinfo': freelancerinfo,
             'form': form,
