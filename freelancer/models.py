@@ -67,6 +67,7 @@ class Freelancer(models.Model):
     rating = models.FloatField(default=0.0, max_length=2)
     location = CountryField(default='MA',blank=True, null=True)
     languages = MultiSelectField(choices=LANGUAGE_CHOICES, blank=True, null=True, max_length=255)
+    email = models.EmailField(blank=True, default='No Email Available')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

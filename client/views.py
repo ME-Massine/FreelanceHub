@@ -6,7 +6,7 @@ from django.contrib import messages
 from client.forms import SignupForm
 from django.contrib.auth.decorators import login_required
 
-from freelancer.models import Freelancer ,Service
+from freelancer.models import Freelancer, Service
 from .models import *
 
 
@@ -14,6 +14,7 @@ from .models import *
 
 def home(request):
     return render(request, 'home.html')
+
 
 def login_view(request):
     if request.method == "POST":
@@ -33,11 +34,12 @@ def login_view(request):
             return redirect('freelancer:dashboard')
 
         else:
-            error={"err" :  "Invalid username or password."}
-            return render(request, 'login.html', {'error':error})
+            error = {"err": "Invalid username or password."}
+            return render(request, 'login.html', {'error': error})
 
     else:
         return render(request, 'login.html')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -59,7 +61,6 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
-
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
@@ -67,22 +68,29 @@ def logout_view(request):
 
     return redirect('clientPage')
 
+
 def settings(request):
     return render(request, 'client/settings.html')
+
 
 def clientpage(request):
     freelancer = Service.objects.all()
     count = Service.objects.count()
-    return render(request, 'client/clientPage.html', {'freelancer': freelancer , 'count': count})
+    return render(request, 'client/clientPage.html', {'freelancer': freelancer, 'count': count})
+
 
 def profileC(request):
     clientinfo = get_object_or_404(Client, user=request.user)
+    mission_open = Mission.objects.filter(client=clientinfo, status='open')
+    mission_progress = Mission.objects.filter(client=clientinfo, status='in_progress')
+    mission_complete = Mission.objects.filter(client=clientinfo, status='completed')
 
-
-    return render(request, 'client/profileC.html')
+    return render(request, 'client/profileC.html',
+                  {'clientinfo': clientinfo,
+                   'mission_open': mission_open, 'mission_complete': mission_complete,
+                   'mission_progress': mission_progress})
 
 
 @login_required
 def freelance_detail(request, pk):
-    return render(request,'client/freelancer_detail.html')
-
+    return render(request, 'client/freelancer_detail.html')
