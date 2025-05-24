@@ -4,136 +4,213 @@
     {% include "navbar.html" with logged_in=True %}
 {% endblock %}
 
-
 {% block content %}
-<div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent full page scrolling */
+            margin: 0;
+            padding: 0;
+        }
 
-                <div class="card shadow rounded p-4">
-                    <div class="row">
-                        <!-- Left Column: Profile Image & Basic Info -->
-                        <div class="col-md-4 text-center border-end">
+        .full-page {
+            display: flex;
+            height: 100vh; /* Full viewport height */
+            width: 100vw;
+            overflow: hidden;
+        }
 
-                            <img src="https://placehold.co/150x150" alt="Profile Image"
-                                 class="rounded-circle mb-3" style="width: 150px; height: 150px;">
-                            <div class="mb-2 text-muted">
-                                <i class="bi bi-geo-alt-fill me-1"></i>
-                                {{ freelancerinfo.location|default:"Unknown Location" }}
-                            </div>
-                            <h4>{{ freelancerinfo.user.username|default:user.username }}</h4>
-                            <div class="mb-2 text-warning">
-                                {% for i in fullstar %}
-                                    <i class="bi bi-star-fill"></i>
-                                {% endfor %}
-                                {% if halfstar %}
-                                    <i class="bi bi-star-half"></i>
-                                {% endif %}
+        .left-panel {
+            width: 300px;
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+            border-right: 1px solid #dee2e6;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
 
-                                {% for i in emptystar %}
-                                    <i class="bi bi-star"></i>
-                                {% endfor %}
-                                <span class="text-muted ms-1">({{ freelancerinfo.rating }})</span>
-                            </div>
-                            <p class="text-muted">simo@gmail.com</p>
-                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-                               aria-controls="offcanvasExample">
-                                Edit profile
-                            </a>
-                            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
-                                 aria-labelledby="offcanvasExampleLabel">
-                                <div class="offcanvas-header">
-                                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="offcanvas-body">
-                                    <form method="POST" action="">
-                                        {% csrf_token %}
+        .right-panel {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
 
-                                        {% if form %}
-                                            <!-- Location -->
-                                            <div class="mb-3">
-                                                <label for="id_location" class="form-label">Location</label>
-                                                {{ form.location }}
-                                            </div>
+        .right-panel::-webkit-scrollbar {
+            width: 6px;
+        }
 
-                                            <!-- Bio -->
-                                            <div class="mb-3">
-                                                <label for="id_bio" class="form-label">Bio</label>
-                                                {{ form.bio }}
-                                            </div>
+        .right-panel::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+    </style>
 
-                                            <!-- Portfolio -->
-                                            <div class="mb-3">
-                                                <label for="id_portfolio_url" class="form-label">Portfolio URL</label>
-                                                {{ form.portfolio_url }}
-                                            </div>
+    <div class="full-page">
+        <!-- Left: Fixed Profile Info -->
+        <div class="left-panel text-center">
 
-                                            <!-- Languages -->
-                                            <div class="mb-3">
-                                                <label for="id_Languages" class="form-label">Languages</label>
-                                                {{ form.Languages }}
-                                            </div>
-
-
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        {% else %}
-                                            <p>No form available.</p>
-                                        {% endif %}
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Bio & Details -->
-                        <div class="col-md-8">
-                            <h5 class="mb-3">About Me</h5>
-                            <p class="text-muted mx-4">
-
-                                {{ freelancerinfo.bio|default:"No bio provided." }}
-
-                            </p>
-                            <hr>
-                            <h5 class="mb-3">Languages</h5>
-                            <p class="text-muted mx-4">
-                                {% if user.freelancerprofile %}
-                                    {{ user.freelancerprofile.bio|default:"No bio provided." }}
-                                {% elif user.clientprofile %}
-                                    {{ user.clientprofile.bio|default:"No bio provided." }}
-                                {% else %}
-
-                                    <ul>
-                                        <li>English <strong>(begginer)</strong></li>
-                                        <br>
-                                        <li>Arabic <strong>(moderate)</strong></li>
-                                        <br>
-                                        <li>French <strong>(fluent)</strong></li>
-                                        <br>
-                                        <li>Tarifit <strong>(very fluent)</strong></li>
-                                    </ul>
-                                {% endif %}
-                            </p>
-
-                            <hr>
-
-                            {% if user.freelancerprofile %}
-                                <h6><strong>Skills:</strong> {{ user.freelancerprofile.skills }}</h6>
-                                <h6><strong>Portfolio:</strong> <a href="{{ user.freelancerprofile.portfolio_url }}"
-                                                                   target="_blank">View</a></h6>
-                                <h6><strong>Rating:</strong> ⭐ {{ user.freelancerprofile.rating }}</h6>
-                            {% elif user.clientprofile %}
-                                <h6><strong>Company:</strong> {{ user.clientprofile.company_name }}</h6>
-                                <h6><strong>Phone:</strong> {{ user.clientprofile.phone_number }}</h6>
-                                <h6><strong>Address:</strong> {{ user.clientprofile.address }}</h6>
-                            {% endif %}
-                        </div>
-
-                    </div>
-                </div>
-
+            <img src="https://placehold.co/150x150" alt="Profile Image"
+                 class="rounded-circle mb-3" style="width: 150px; height: 150px;">
+            <h4 class=" fw-bold text-primary">@{{ clientinfo.user.username|default:user.username }}</h4>
+            <div class="mb-2 text-muted">
+                <i class="bi bi-geo-alt-fill me-1"></i>
+                {{ clientinfo.country|default:"Unknown Location" }}
             </div>
+
+            <h6><strong>Company:</strong> {{ clientinfo.company_name }}</h6>
+            <h6><strong>Phone:</strong> {{ clientinfo.phone_number }}</h6>
+            <p class="text-muted">{{ clientinfo.email }}</p>
+
+            <a class="btn btn-primary mt-3" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+               aria-controls="offcanvasExample">
+                Edit profile
+            </a>
+        </div>
+
+        <!-- Right: Scrollable Details -->
+        <div class="right-panel">
+            <h5 class="mb-3">About Me</h5>
+            <p class="text-muted">
+                {{ clientinfo.bio|default:"No bio provided." }}
+            </p>
+            <hr>
+            <h6><strong>Company:</strong> {{ clientinfo.company_name }}</h6>
+            <h6><strong>Phone:</strong> {{ clientinfo.phone_number }}</h6>
+            <hr>
+
+            <h4 class="mb-3">Open</h4>
+            <div class="row">
+                {% for m in mission_open %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card position-relative" style="width: 100%;">
+                <span class="badge text-uppercase position-absolute {{ m.get_level_badge_class }}"
+                      style="top: -10px; left: 10px; font-size: 0.8rem; padding: 0.4em 0.7em;">
+                    {{ m.level|title }}
+                </span>
+
+                            <div class="card-body pt-4">
+                                <h5 class="card-title">{{ m.title }}</h5>
+                                <p class="card-text">{{ m.description|truncatewords:10 }}</p>
+
+                                <span tabindex="0"
+                                      role="button"
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus"
+                                      data-bs-html="true"
+                                      data-bs-title="Contact Info"
+                                      data-bs-custom-class="custom-popover"
+                                      data-bs-content="<strong>Phone:</strong> {{ m.client.phone_number }}<br><strong>Company:</strong> {{ m.client.company_name }}"
+                                      class="text-purple fw-semibold"
+                                      style="cursor: pointer;">
+                        @{{ m.client.user.username }}
+                    </span>
+
+                                <h5 class="text-success fw-bold">{{ m.price }}$/hour</h5>
+                                <div class="d-inline-block px-3 py-1 mt-2 text-muted bg-light rounded-pill"
+                                     style="background-color: #e0e0e0;">
+                                    {{ m.get_category_display }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <h4 class="mb-3">In Progress</h4>
+            <div class="row">
+                {% for m in mission_progress %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card position-relative" style="width: 100%;">
+                <span class="badge text-uppercase position-absolute {{ m.get_level_badge_class }}"
+                      style="top: -10px; left: 10px; font-size: 0.8rem; padding: 0.4em 0.7em;">
+                    {{ m.level|title }}
+                </span>
+
+                            <div class="card-body pt-4">
+                                <h5 class="card-title">{{ m.title }}</h5>
+                                <p class="card-text">{{ m.description|truncatewords:10 }}</p>
+
+                                <span tabindex="0"
+                                      role="button"
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus"
+                                      data-bs-html="true"
+                                      data-bs-title="Contact Info"
+                                      data-bs-custom-class="custom-popover"
+                                      data-bs-content="<strong>Phone:</strong> {{ m.client.phone_number }}<br><strong>Company:</strong> {{ m.client.company_name }}"
+                                      class="text-purple fw-semibold"
+                                      style="cursor: pointer;">
+                        @{{ m.client.user.username }}
+                    </span>
+
+                                <h5 class="text-success fw-bold">{{ m.price }}$/hour</h5>
+                                <div class="d-inline-block px-3 py-1 mt-2 text-muted bg-light rounded-pill"
+                                     style="background-color: #e0e0e0;">
+                                    {{ m.get_category_display }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        <div class="mb-5">
+            <h4 class="mb-3">Completed</h4>
+            <div class="row">
+                {% for m in mission_complete %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card position-relative" style="width: 100%;">
+                <span class="badge text-uppercase position-absolute {{ m.get_level_badge_class }}"
+                      style="top: -10px; left: 10px; font-size: 0.8rem; padding: 0.4em 0.7em;">
+                    {{ m.level|title }}
+                </span>
+
+                            <div class="card-body pt-4">
+                                <h5 class="card-title">{{ m.title }}</h5>
+                                <p class="card-text">{{ m.description|truncatewords:10 }}</p>
+
+                                <span tabindex="0"
+                                      role="button"
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus"
+                                      data-bs-html="true"
+                                      data-bs-title="Contact Info"
+                                      data-bs-custom-class="custom-popover"
+                                      data-bs-content="<strong>Phone:</strong> {{ m.client.phone_number }}<br><strong>Company:</strong> {{ m.client.company_name }}"
+                                      class="text-purple fw-semibold"
+                                      style="cursor: pointer;">
+                        @{{ m.client.user.username }}
+                    </span>
+
+                                <h5 class="text-success fw-bold">{{ m.price }}$/hour</h5>
+                                <div class="d-inline-block px-3 py-1 mt-2 text-muted bg-light rounded-pill"
+                                     style="background-color: #e0e0e0;">
+                                    {{ m.get_category_display }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+
         </div>
     </div>
 
+    <!-- Offcanvas Edit Section -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+         aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Edit form goes here.</p>
+        </div>
+    </div>
 {% endblock content %}

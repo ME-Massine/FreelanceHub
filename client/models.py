@@ -9,6 +9,8 @@ class Client(models.Model):
     company_name = models.CharField(max_length=255, default='not provided')
     phone_number = models.CharField(max_length=20, default='not provided')
     country = CountryField(default='MA',blank=True, null=True)
+    bio = models.TextField(blank=True, default='No Bio Available')
+    email = models.EmailField(blank=True, default='No Email Available')
 
 class Mission(models.Model):
     LEVEL_CHOICES = [
@@ -25,6 +27,11 @@ class Mission(models.Model):
         ('other', 'Other'),
     ]
 
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+    ]
 
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='missions')
@@ -34,6 +41,7 @@ class Mission(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES, default='other')
     level = models.CharField(max_length=15, choices=LEVEL_CHOICES, default='unknown')
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='open')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_level_badge_class(self):
