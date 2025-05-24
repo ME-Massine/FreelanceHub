@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from client.forms import SignupForm
 from django.contrib.auth.decorators import login_required
 
 from freelancer.models import Freelancer ,Service
+from .models import *
 
 
 # Create your views here.
@@ -75,6 +76,9 @@ def clientpage(request):
     return render(request, 'client/clientPage.html', {'freelancer': freelancer , 'count': count})
 
 def profileC(request):
+    clientinfo = get_object_or_404(Client, user=request.user)
+
+
     return render(request, 'client/profileC.html')
 
 

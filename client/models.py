@@ -10,7 +10,6 @@ class Client(models.Model):
     phone_number = models.CharField(max_length=20, default='not provided')
     country = CountryField(default='MA',blank=True, null=True)
 
-
 class Mission(models.Model):
     LEVEL_CHOICES = [
         ('beginner', 'Beginner'),
