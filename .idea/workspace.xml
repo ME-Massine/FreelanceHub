@@ -5,17 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="added the mission application function and the commenting system">
+      <change afterPath="$PROJECT_DIR$/client/templates/client/freelancer_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ProjetPython.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetPython.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetPython/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/templates/client/clientPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/templates/client/clientPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/templates/client/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/templates/client/profileC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/profileF.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -47,12 +50,12 @@
     &quot;assignee&quot;: &quot;ME-Massine&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ME-Massine/FreelanceHub.git&quot;,
-    &quot;accountId&quot;: &quot;bba76402-05a7-4df5-b10e-14d74a08cd0c&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ME-Massine/FreelanceHub.git",
+    "accountId": "61dbb79a-2d14-49cc-bf63-61f659208117"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -102,9 +105,8 @@
         <env name="DJANGO_SETTINGS_MODULE" value="ProjetPython.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (DjangoProject)" />
       <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
@@ -148,6 +150,7 @@
       <workItem from="1747935952219" duration="6239000" />
       <workItem from="1747988819397" duration="3712000" />
       <workItem from="1747996225478" duration="330000" />
+      <workItem from="1748097485490" duration="2412000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />

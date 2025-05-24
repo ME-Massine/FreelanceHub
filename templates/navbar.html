@@ -64,7 +64,7 @@
                         {% endif %}
 
                         <div class="dropdown ms-2">
-                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                            <a href="" class="d-flex align-items-center text-decoration-none dropdown-toggle"
                                id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1746195048~exp=1746198648~hmac=638e192329dd951229828bde5bb7891db384b1bcd2496af3ce4f18f6b3ba624f&w=740"
                                      alt="profile"
@@ -72,7 +72,7 @@
                                      style="width: 40px; height: 40px; object-fit: cover;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                {% if client %}
+                                {% if request.user.groups.first.name == 'client' %}
                                     <li><a class="dropdown-item" href="{% url 'client:profile' %}">View Profile</a></li>
                                     <li><a class="dropdown-item" href="{% url 'client:settings' %}">Settings</a></li>
                                 {% else %}

@@ -6,7 +6,7 @@ from django.contrib import messages
 from client.forms import SignupForm
 from django.contrib.auth.decorators import login_required
 
-from freelancer.models import *
+from freelancer.models import Freelancer ,Service
 
 
 # Create your views here.
@@ -71,7 +71,14 @@ def settings(request):
 
 def clientpage(request):
     freelancer = Service.objects.all()
-    return render(request, 'client/clientPage.html', {'freelancer': freelancer})
+    count = Service.objects.count()
+    return render(request, 'client/clientPage.html', {'freelancer': freelancer , 'count': count})
 
-def profile(request):
-    return render(request, 'client/profile.html')
+def profileC(request):
+    return render(request, 'client/profileC.html')
+
+
+@login_required
+def freelance_detail(request, pk):
+    return render(request,'client/freelancer_detail.html')
+

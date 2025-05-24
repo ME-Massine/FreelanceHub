@@ -55,7 +55,7 @@ def mission_detail(request, pk):
 
 
 @login_required
-def profile(request):
+def profileF(request):
     freelancerinfo = get_object_or_404(Freelancer, user=request.user)
     decimal, integer = math.modf(freelancerinfo.rating)
     fullstar = int(integer)
@@ -67,7 +67,7 @@ def profile(request):
 
     form = ProfileForm(instance=freelancerinfo)
 
-    return render(request, 'freelancer/profile.html',
+    return render(request, 'freelancer/profileF.html',
                   {'freelancerinfo': freelancerinfo, 'fullstar': range(fullstar),
                    'halfstar': halfstar,
                    'emptystar': range(emptystar), "form": form})
@@ -85,4 +85,4 @@ def profile_edit(request):
     else:
         form = ProfileForm(instance=freelancerinfo)
 
-    return render(request, 'freelancer/profile.html', {"form": form, "freelancerinfo": freelancerinfo})
+    return render(request, 'freelancer/profileF.html', {"form": form, "freelancerinfo": freelancerinfo})
