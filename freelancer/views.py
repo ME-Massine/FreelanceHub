@@ -2,6 +2,7 @@ import math
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from client.models import Mission, Application
 from .models import Freelancer, Service
@@ -57,32 +58,50 @@ def mission_detail(request, pk):
 @login_required
 def profileF(request):
     freelancerinfo = get_object_or_404(Freelancer, user=request.user)
+    language_dict = dict(Freelancer.LANGUAGE_CHOICES)
+    full_languages = [language_dict.get(code, code) for code in freelancerinfo.languages]
+    selected_language_codes = freelancerinfo.languages or []
+
     decimal, integer = math.modf(freelancerinfo.rating)
     fullstar = int(integer)
-    if decimal >= 0.5:
-        halfstar = 1
-    else:
-        halfstar = 0
+    halfstar = 1 if decimal >= 0.5 else 0
     emptystar = 5 - fullstar - halfstar
 
     form = ProfileForm(instance=freelancerinfo)
 
-    return render(request, 'freelancer/profileF.html',
-                  {'freelancerinfo': freelancerinfo, 'fullstar': range(fullstar),
-                   'halfstar': halfstar,
-                   'emptystar': range(emptystar), "form": form})
+    return render(request, 'freelancer/profileF.html', {
+        'freelancerinfo': freelancerinfo,
+        'fullstar': range(fullstar),
+        'halfstar': halfstar,
+        'emptystar': range(emptystar),
+        'form': form,
+        'full_languages': full_languages,
+        'selected_language_codes': selected_language_codes,
+    })
 
 
-@login_required
+@require_POST
 def profile_edit(request):
     freelancerinfo = get_object_or_404(Freelancer, user=request.user)
+    post_data = request.POST.copy()
 
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=freelancerinfo)
-        if form.is_valid():
-            form.save()
-            return redirect('freelancer:profile')
+    # Handle languages: convert from comma-separated string to list
+    languages_raw = post_data.get('languages', '')
+    if languages_raw:
+        lang_list = [lang.strip() for lang in languages_raw.split(',') if lang.strip()]
+        post_data.setlist('languages', lang_list)
     else:
-        form = ProfileForm(instance=freelancerinfo)
+        post_data.setlist('languages', [])
 
-    return render(request, 'freelancer/profileF.html', {"form": form, "freelancerinfo": freelancerinfo})
+    form = ProfileForm(post_data, instance=freelancerinfo)
+    if form.is_valid():
+        form.save()
+        return redirect('freelancer:profile')
+    else:
+        print("Form initial data:", form.initial)
+        print("Form cleaned data (if valid):", form.cleaned_data if form.is_valid() else "Invalid form")
+        return render(request, 'freelancer/profileF.html', {
+            'freelancerinfo': freelancerinfo,
+            'form': form,
+            'form_errors': form.errors,
+        })

@@ -66,7 +66,7 @@ class Freelancer(models.Model):
     portfolio_url = models.URLField(blank=True)
     rating = models.FloatField(default=0.0, max_length=2)
     location = CountryField(default='MA',blank=True, null=True)
-    languages = MultiSelectField(choices=LANGUAGE_CHOICES, blank=True, null=True, max_length=255)
+    languages = MultiSelectField(choices=LANGUAGE_CHOICES, blank=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

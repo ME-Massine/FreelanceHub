@@ -1,4 +1,7 @@
 from django import forms
+from django.forms import CheckboxSelectMultiple, SelectMultiple
+from multiselectfield import MultiSelectFormField
+
 from freelancer.models import Freelancer
 from client import models
 
@@ -10,6 +13,8 @@ class ApplicationForm(forms.ModelForm):
         fields = ['content']
 
 class ProfileForm(forms.ModelForm):
+    languages = MultiSelectFormField(choices=Freelancer.LANGUAGE_CHOICES, required=False)
+
     class Meta:
         model = Freelancer
-        fields = ['location', 'bio', 'portfolio_url']
+        fields = ['location', 'bio', 'portfolio_url', 'languages']

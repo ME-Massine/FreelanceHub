@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block content %}
+
+    <style>
+        .language-pill {
+            transition: all 0.2s ease;
+        }
+
+        .language-pill:hover {
+            background-color: #d6d6d6;
+        }
+    </style>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -20,7 +30,8 @@
                                 <i class="bi bi-geo-alt-fill me-1"></i>
                                 {{ freelancerinfo.location|default:"Unknown Location" }}
                             </div>
-                            <h4>{{ freelancerinfo.user.username|default:user.username }}</h4>
+                            <h4 class="fw-bold text-primary">
+                                @{{ freelancerinfo.user.username|default:user.username }}</h4>
                             <div class="mb-2 text-warning">
                                 {% for i in fullstar %}
                                     <i class="bi bi-star-fill"></i>
@@ -47,11 +58,10 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="offcanvas-body">
-                                    <form method="POST" action="">
+                                    <form method="POST" action="{% url 'freelancer:profile_edit' %}">
                                         {% csrf_token %}
 
                                         {% if form %}
-                                            <!-- Location -->
                                             <div class="mb-3">
                                                 <label for="id_location" class="form-label">Location</label>
                                                 {{ form.location }}
@@ -69,10 +79,40 @@
                                                 {{ form.portfolio_url }}
                                             </div>
 
-                                            <!-- Languages -->
+                                            <div id="languagesInputsContainer">
+                                                {% for code in selected_language_codes %}
+                                                    <input type="hidden" name="languages" value="{{ code }}">
+                                                {% endfor %}
+                                            </div>
+
+                                            <!-- Language selection dropdown -->
                                             <div class="mb-3">
-                                                <label for="id_Languages" class="form-label">Languages</label>
-                                                {{ form.Languages }}
+                                                <label class="form-label">Languages</label>
+                                                <div class="d-flex gap-2">
+                                                    <select id="languageDropdown" class="form-select">
+                                                        <option value="">-- Select Language --</option>
+                                                        {% for code, name in form.fields.languages.choices %}
+                                                            <option value="{{ code }}">{{ name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            onclick="addLanguage()">Add
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Pills for selected languages -->
+                                            <div id="selectedLanguages" class="d-flex flex-wrap gap-2 mt-2">
+                                                {% for code in selected_language_codes %}
+                                                    {% for lang_code, lang_name in form.fields.languages.choices %}
+                                                        {% if lang_code == code %}
+                                                            <span class="d-inline-block px-3 py-1 text-muted bg-light rounded-pill"
+                                                                  data-code="{{ code }}">
+                    {{ lang_name }}
+                </span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
                                             </div>
 
 
@@ -96,36 +136,20 @@
                             <hr>
                             <h5 class="mb-3">Languages</h5>
                             <p class="text-muted mx-4">
-                                {% if user.freelancerprofile %}
-                                    {{ user.freelancerprofile.bio|default:"No bio provided." }}
-                                {% elif user.clientprofile %}
-                                    {{ user.clientprofile.bio|default:"No bio provided." }}
-                                {% else %}
+                            <div class="d-flex flex-wrap gap-2">
 
-                                    <ul>
-                                        <li>English <strong>(begginer)</strong></li>
-                                        <br>
-                                        <li>Arabic <strong>(moderate)</strong></li>
-                                        <br>
-                                        <li>French <strong>(fluent)</strong></li>
-                                        <br>
-                                        <li>Tarifit <strong>(very fluent)</strong></li>
-                                    </ul>
-                                {% endif %}
+                                {% for lang in full_languages %}
+                                    <span class="d-inline-block px-3 py-1 mt-2 text-muted rounded-pill"
+                                          style="background-color: #EAEFEF;">
+                                        {{ lang }}
+                                    </span>
+                                {% empty %}
+                                    <span class="text-muted">No languages selected.</span>
+                                {% endfor %}
+                            </div>
                             </p>
 
-                            <hr>
 
-                            {% if user.freelancerprofile %}
-                                <h6><strong>Skills:</strong> {{ user.freelancerprofile.skills }}</h6>
-                                <h6><strong>Portfolio:</strong> <a href="{{ user.freelancerprofile.portfolio_url }}"
-                                                                   target="_blank">View</a></h6>
-                                <h6><strong>Rating:</strong> ⭐ {{ user.freelancerprofile.rating }}</h6>
-                            {% elif user.clientprofile %}
-                                <h6><strong>Company:</strong> {{ user.clientprofile.company_name }}</h6>
-                                <h6><strong>Phone:</strong> {{ user.clientprofile.phone_number }}</h6>
-                                <h6><strong>Address:</strong> {{ user.clientprofile.address }}</h6>
-                            {% endif %}
                         </div>
 
                     </div>
@@ -134,4 +158,34 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function addLanguage() {
+            const dropdown = document.getElementById("languageDropdown");
+            const selectedValue = dropdown.value;
+            const selectedText = dropdown.options[dropdown.selectedIndex].text;
+            const container = document.getElementById("selectedLanguages");
+            const inputsContainer = document.getElementById("languagesInputsContainer");
+
+            if (!selectedValue || Array.from(container.children).some(el => el.dataset.code === selectedValue)) {
+                return;
+            }
+
+            // Add pill
+            const pill = document.createElement("span");
+            pill.className = "d-inline-block px-3 py-1 text-muted bg-light rounded-pill";
+            pill.dataset.code = selectedValue;
+            pill.innerText = selectedText;
+            container.appendChild(pill);
+
+            // Add hidden input
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "languages";
+            hiddenInput.value = selectedValue;
+            inputsContainer.appendChild(hiddenInput);
+
+            dropdown.value = "";
+        }
+    </script>
 {% endblock %}
