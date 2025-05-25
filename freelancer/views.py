@@ -1,13 +1,14 @@
 import math
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from client.models import Mission, Application
 from .models import Freelancer, Service
 
-from .forms import ApplicationForm, ProfileForm
+from .forms import ApplicationForm, ProfileForm, ServiceForm
 
 
 # Create your views here.
@@ -25,8 +26,8 @@ def settings(request):
 
 @login_required
 def dashboard(request):
-    missions = Mission.objects.all()
     count = Mission.objects.count()
+    missions = Mission.objects.annotate(proposal_count=Count('applications'))
 
     return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
 
@@ -69,6 +70,8 @@ def profileF(request):
 
     form = ProfileForm(instance=freelancerinfo)
 
+    Services = Service.objects.filter(user=request.user)
+
     return render(request, 'freelancer/profileF.html', {
         'freelancerinfo': freelancerinfo,
         'fullstar': range(fullstar),
@@ -77,6 +80,7 @@ def profileF(request):
         'form': form,
         'full_languages': full_languages,
         'selected_language_codes': selected_language_codes,
+        "Services": Services,
     })
 
 
@@ -102,3 +106,18 @@ def profile_edit(request):
             'form': form,
             'form_errors': form.errors,
         })
+
+
+@login_required
+def addService(request):
+    if request.method == 'POST':
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            service = form.save(commit=False)
+            service.user = request.user
+            service.save()
+            return redirect('freelancer:profile')
+    else:
+         form = ServiceForm()
+
+    return render(request, "freelancer/addService.html", {'form': form})

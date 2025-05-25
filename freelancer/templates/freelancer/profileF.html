@@ -5,157 +5,219 @@
 {% endblock %}
 
 {% block content %}
-
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .full-page {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            width: 300px;
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+            border-right: 1px solid #dee2e6;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .right-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .right-panel::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
         .language-pill {
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
         }
 
         .language-pill:hover {
             background-color: #d6d6d6;
         }
+
+        @media (max-width: 768px) {
+            .full-page {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+        }
     </style>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
 
-                <div class="card shadow rounded p-4">
-                    <div class="row">
-                        <!-- Left Column: Profile Image & Basic Info -->
-                        <div class="col-md-4 text-center border-end">
+    <div class="full-page">
+        <!-- LEFT PANEL -->
+        <div class="left-panel text-center">
+            <img src="https://placehold.co/150x150" alt="Profile Image"
+                 class="rounded-circle mb-3" style="width: 150px; height: 150px;">
 
-                            <img src="https://placehold.co/150x150" alt="Profile Image"
-                                 class="rounded-circle mb-3" style="width: 150px; height: 150px;">
-                            <div class="mb-2 text-muted">
-                                <i class="bi bi-geo-alt-fill me-1"></i>
-                                {{ freelancerinfo.location|default:"Unknown Location" }}
+            <div class="mb-2 text-muted">
+                <i class="bi bi-geo-alt-fill me-1"></i>
+                {{ freelancerinfo.location|default:"Unknown Location" }}
+            </div>
+
+            <h4 class="fw-bold text-primary">@{{ freelancerinfo.user.username|default:user.username }}</h4>
+
+            <div class="mb-2 text-warning">
+                {% for i in fullstar %}
+                    <i class="bi bi-star-fill"></i>
+                {% endfor %}
+                {% if halfstar %}
+                    <i class="bi bi-star-half"></i>
+                {% endif %}
+                {% for i in emptystar %}
+                    <i class="bi bi-star"></i>
+                {% endfor %}
+                <span class="text-muted ms-1">({{ freelancerinfo.rating }})</span>
+            </div>
+
+            <p class="text-muted">simo@gmail.com</p>
+
+            <a class="btn btn-primary w-100" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+               aria-controls="offcanvasExample">Edit Profile</a>
+
+            <!-- Offcanvas Form -->
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+                 aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form method="POST" action="{% url 'freelancer:profile_edit' %}">
+                        {% csrf_token %}
+
+                        {% if form %}
+                            <div class="mb-3">
+                                <label for="id_location" class="form-label">Location</label>
+                                {{ form.location }}
                             </div>
-                            <h4 class="fw-bold text-primary">
-                                @{{ freelancerinfo.user.username|default:user.username }}</h4>
-                            <div class="mb-2 text-warning">
-                                {% for i in fullstar %}
-                                    <i class="bi bi-star-fill"></i>
-                                {% endfor %}
-                                {% if halfstar %}
-                                    <i class="bi bi-star-half"></i>
-                                {% endif %}
 
-                                {% for i in emptystar %}
-                                    <i class="bi bi-star"></i>
-                                {% endfor %}
-                                <span class="text-muted ms-1">({{ freelancerinfo.rating }})</span>
+                            <div class="mb-3">
+                                <label for="id_bio" class="form-label">Bio</label>
+                                {{ form.bio }}
                             </div>
-                            <p class="text-muted">simo@gmail.com</p>
-                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-                               aria-controls="offcanvasExample">
-                                Edit profile
-                            </a>
-                            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
-                                 aria-labelledby="offcanvasExampleLabel">
-                                <div class="offcanvas-header">
-                                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                            aria-label="Close"></button>
+
+                            <div class="mb-3">
+                                <label for="id_portfolio_url" class="form-label">Portfolio URL</label>
+                                {{ form.portfolio_url }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Languages</label>
+                                <div class="d-flex gap-2">
+                                    <select id="languageDropdown" class="form-select">
+                                        <option value="">-- Select Language --</option>
+                                        {% for code, name in form.fields.languages.choices %}
+                                            <option value="{{ code }}">{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="button" class="btn btn-secondary" onclick="addLanguage()">Add</button>
                                 </div>
-                                <div class="offcanvas-body">
-                                    <form method="POST" action="{% url 'freelancer:profile_edit' %}">
-                                        {% csrf_token %}
+                            </div>
 
-                                        {% if form %}
-                                            <div class="mb-3">
-                                                <label for="id_location" class="form-label">Location</label>
-                                                {{ form.location }}
-                                            </div>
-
-                                            <!-- Bio -->
-                                            <div class="mb-3">
-                                                <label for="id_bio" class="form-label">Bio</label>
-                                                {{ form.bio }}
-                                            </div>
-
-                                            <!-- Portfolio -->
-                                            <div class="mb-3">
-                                                <label for="id_portfolio_url" class="form-label">Portfolio URL</label>
-                                                {{ form.portfolio_url }}
-                                            </div>
-
-                                            <div id="languagesInputsContainer">
-                                                {% for code in selected_language_codes %}
-                                                    <input type="hidden" name="languages" value="{{ code }}">
-                                                {% endfor %}
-                                            </div>
-
-                                            <!-- Language selection dropdown -->
-                                            <div class="mb-3">
-                                                <label class="form-label">Languages</label>
-                                                <div class="d-flex gap-2">
-                                                    <select id="languageDropdown" class="form-select">
-                                                        <option value="">-- Select Language --</option>
-                                                        {% for code, name in form.fields.languages.choices %}
-                                                            <option value="{{ code }}">{{ name }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                    <button type="button" class="btn btn-secondary"
-                                                            onclick="addLanguage()">Add
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <!-- Pills for selected languages -->
-                                            <div id="selectedLanguages" class="d-flex flex-wrap gap-2 mt-2">
-                                                {% for code in selected_language_codes %}
-                                                    {% for lang_code, lang_name in form.fields.languages.choices %}
-                                                        {% if lang_code == code %}
-                                                            <span class="d-inline-block px-3 py-1 text-muted bg-light rounded-pill"
-                                                                  data-code="{{ code }}">
-                    {{ lang_name }}
-                </span>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endfor %}
-                                            </div>
-
-
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        {% else %}
-                                            <p>No form available.</p>
+                            <div class="d-flex flex-wrap gap-2 mt-2" id="selectedLanguages">
+                                {% for code in selected_language_codes %}
+                                    {% for lang_code, lang_name in form.fields.languages.choices %}
+                                        {% if lang_code == code %}
+                                            <span class="language-pill px-3 py-1 bg-light text-muted rounded-pill"
+                                                  data-code="{{ code }}">
+                                            {{ lang_name }}
+                                        </span>
                                         {% endif %}
-                                    </form>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+
+                            <div id="languagesInputsContainer">
+                                {% for code in selected_language_codes %}
+                                    <input type="hidden" name="languages" value="{{ code }}">
+                                {% endfor %}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                        {% else %}
+                            <p>No form available.</p>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+            <h5 class="mb-3">About Me</h5>
+            <p class="text-muted mx-4">{{ freelancerinfo.bio|default:"No bio provided." }}</p>
+            <hr>
+
+            <h5 class="mb-3">Languages</h5>
+            <div class="text-muted mx-4 d-flex flex-wrap gap-2">
+                {% for lang in full_languages %}
+                    <span class="d-inline-block px-3 py-1 mt-2 text-muted rounded-pill bg-light">
+                    {{ lang }}
+                </span>
+                {% empty %}
+                    <span class="text-muted">No languages selected.</span>
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="mb-5">
+                <h3 class="mb-3">My Services</h3>
+
+                <div class="row">
+                    {% for i in Services %}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-5">
+                            <div class="card h-100 position-relative d-flex flex-column" style="z-index: 10;">
+                                <img src="{{ i.image_url }}" class="card-img-top w-100"
+                                     style="height: 200px; object-fit: cover;" alt="...">
+                                <div class="card-body d-flex flex-column" style="flex: 1 1 auto; min-height: 250px;">
+                                    <h5 class="card-title">{{ i.title }}</h5>
+                                    <p class="card-text flex-grow-1"
+                                       style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ i.description }}
+                                    </p>
+
+                                    <p class="fw-bold text-success mb-1">From ${{ i.price }}</p>
+
+                                    <p class="text-warning mb-2">
+                                        <i class="bi bi-star-fill"></i> {{ i.rate }}
+                                    </p>
+
+                                    <a href="{% url 'client:freelance_detail' i.id %}" class="btn btn-primary mt-auto">Go
+                                        somewhere</a>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Right Column: Bio & Details -->
-                        <div class="col-md-8">
-                            <h5 class="mb-3">About Me</h5>
-                            <p class="text-muted mx-4">
-
-                                {{ freelancerinfo.bio|default:"No bio provided." }}
-
-                            </p>
-                            <hr>
-                            <h5 class="mb-3">Languages</h5>
-                            <p class="text-muted mx-4">
-                            <div class="d-flex flex-wrap gap-2">
-
-                                {% for lang in full_languages %}
-                                    <span class="d-inline-block px-3 py-1 mt-2 text-muted rounded-pill"
-                                          style="background-color: #EAEFEF;">
-                                        {{ lang }}
-                                    </span>
-                                {% empty %}
-                                    <span class="text-muted">No languages selected.</span>
-                                {% endfor %}
-                            </div>
-                            </p>
-
-
-                        </div>
-
-                    </div>
+                    {% endfor %}
                 </div>
 
             </div>
+
+
         </div>
     </div>
 
@@ -171,14 +233,12 @@
                 return;
             }
 
-            // Add pill
             const pill = document.createElement("span");
-            pill.className = "d-inline-block px-3 py-1 text-muted bg-light rounded-pill";
+            pill.className = "language-pill px-3 py-1 text-muted bg-light rounded-pill";
             pill.dataset.code = selectedValue;
-            pill.innerText = selectedText;
+            pill.textContent = selectedText;
             container.appendChild(pill);
 
-            // Add hidden input
             const hiddenInput = document.createElement("input");
             hiddenInput.type = "hidden";
             hiddenInput.name = "languages";

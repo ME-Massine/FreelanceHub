@@ -41,7 +41,6 @@
                 </div>
 
                 <!-- Right-aligned Auth Links -->
-                <!-- Right-aligned Auth Links -->
                 <div class="ms-auto d-flex align-items-center">
                     {% if not logged_in %}
                         <ul class="navbar-nav">
@@ -77,6 +76,7 @@
                                     <li><a class="dropdown-item" href="{% url 'client:profile' %}">View Profile</a></li>
                                     <li><a class="dropdown-item" href="{% url 'client:settings' %}">Settings</a></li>
                                 {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'freelancer:add-service' %}">Add Your Offer</a></li>
                                     <li><a class="dropdown-item" href="{% url 'freelancer:profile' %}">View Profile</a>
                                     </li>
                                     <li><a class="dropdown-item" href="{% url 'freelancer:settings' %}">Settings</a>

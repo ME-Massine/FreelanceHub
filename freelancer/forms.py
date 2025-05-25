@@ -2,15 +2,15 @@ from django import forms
 from django.forms import CheckboxSelectMultiple, SelectMultiple
 from multiselectfield import MultiSelectFormField
 
-from freelancer.models import Freelancer
+from freelancer.models import Freelancer, Service
 from client import models
-
 
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = models.Application
         fields = ['content']
+
 
 class ProfileForm(forms.ModelForm):
     languages = MultiSelectFormField(
@@ -21,3 +21,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Freelancer
         fields = ['bio', 'portfolio_url', 'location', 'languages']
+
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['title', 'description', 'image_url', 'price']
