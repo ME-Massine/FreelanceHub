@@ -91,11 +91,10 @@ def profile_edit(request):
 
     # Use getlist to get all language codes submitted (from hidden inputs)
     lang_list = post_data.getlist('languages')
-
-    # Set the languages list in post_data correctly
     post_data.setlist('languages', lang_list)
 
-    form = ProfileForm(post_data, instance=freelancerinfo)
+    form = ProfileForm(post_data, request.FILES, instance=freelancerinfo)
+
     if form.is_valid():
         form.save()
         return redirect('freelancer:profile')

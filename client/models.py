@@ -5,12 +5,15 @@ from django_countries.fields import CountryField
 
 # Create your models here.
 class Client(models.Model):
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    pfp = models.ImageField(upload_to='uploads/', default='uploads/default.jpg')
     company_name = models.CharField(max_length=255, default='not provided')
-    phone_number = models.CharField(max_length=20, default='not provided')
+    phone_number = models.CharField(max_length=15, default='not provided')
     country = CountryField(default='MA',blank=True, null=True)
-    bio = models.TextField(blank=True, default='No Bio Available')
-    email = models.EmailField(blank=True, default='No Email Available')
+    bio = models.TextField(blank=True, default='No Bio provided')
+    email = models.EmailField(blank=True, default='No Email provided', null=True)
 
 class Mission(models.Model):
     LEVEL_CHOICES = [
@@ -48,13 +51,13 @@ class Mission(models.Model):
         return {
             'beginner': 'bg-success',
             'intermediate': 'bg-warning text-dark',
-            'expert': 'bg-danger',
+            'expert': 'bg-danger'   ,
         }.get(self.level, 'bg-secondary')
 
 class Application(models.Model):
     mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='applications')
-
     applicant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applicant')
+
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

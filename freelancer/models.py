@@ -62,6 +62,8 @@ class Freelancer(models.Model):
 
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    pfp = models.ImageField(upload_to='uploads/', default='uploads/default.jpg')
     bio = models.TextField(blank=True, default='No Bio Available')
     portfolio_url = models.URLField(blank=True)
     rating = models.FloatField(default=0.0, max_length=2)
@@ -76,8 +78,9 @@ class Service(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True, default='No Description Available')
     image_url = models.URLField(default="https://placehold.co/600x400")
+    image = models.ImageField(upload_to='uploads/services', default='uploads/default.jpg')
     price = models.DecimalField(max_digits=8, decimal_places=2)
     rate = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     created_at = models.DateTimeField(auto_now_add=True)

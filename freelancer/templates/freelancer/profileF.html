@@ -71,7 +71,7 @@
     <div class="full-page">
         <!-- LEFT PANEL -->
         <div class="left-panel text-center">
-            <img src="https://placehold.co/150x150" alt="Profile Image"
+            <img src="{{ freelancerinfo.pfp.url }}" alt="Profile Image"
                  class="rounded-circle mb-3" style="width: 150px; height: 150px;">
 
             <div class="mb-2 text-muted">
@@ -108,10 +108,22 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <form method="POST" action="{% url 'freelancer:profile_edit' %}">
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'freelancer:profile_edit' %}">
                         {% csrf_token %}
 
                         {% if form %}
+                            <label for="id_pfp" class="form-label fw-semibold">Profile Picture</label>
+
+                            <div class="d-flex flex-column align-items-center mb-3">
+                                <img id="pfpPreview" src="{{ freelancerinfo.pfp.url }}" alt="Profile Picture Preview"
+                                     class="rounded-circle mb-3"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+
+                                <input type="file" id="id_pfp" name="pfp" accept="image/*" class="form-control"
+                                       onchange="previewPfp(this)"
+                                       style="max-width: 150px;">
+                            </div>
+
                             <div class="mb-3">
                                 <label for="id_location" class="form-label">Location</label>
                                 {{ form.location }}
@@ -246,6 +258,13 @@
             inputsContainer.appendChild(hiddenInput);
 
             dropdown.value = "";
+        }
+
+        function previewPfp(input) {
+            if (input.files && input.files[0]) {
+                const preview = document.getElementById('pfpPreview');
+                preview.src = URL.createObjectURL(input.files[0]);
+            }
         }
     </script>
 {% endblock %}

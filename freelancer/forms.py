@@ -20,7 +20,13 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Freelancer
-        fields = ['bio', 'portfolio_url', 'location', 'languages']
+        fields = ['pfp', 'bio', 'portfolio_url', 'location', 'languages']
+        widgets = {
+            'pfp': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            })
+        }
 
 
 class ServiceForm(forms.ModelForm):

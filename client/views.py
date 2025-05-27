@@ -57,7 +57,7 @@ def signup(request):
         else:
             messages.error(request, "Please complete the form correctly.")
     else:
-        form = UserCreationForm()
+        form = SignupForm()
     return render(request, 'signup.html', {'form': form})
 
 
@@ -68,17 +68,17 @@ def logout_view(request):
 
     return redirect('clientPage')
 
-
+@login_required
 def settings(request):
     return render(request, 'client/settings.html')
 
-
+@login_required
 def clientpage(request):
     freelancer = Service.objects.all()
     count = Service.objects.count()
     return render(request, 'client/clientPage.html', {'freelancer': freelancer, 'count': count})
 
-
+@login_required
 def profileC(request):
     clientinfo = get_object_or_404(Client, user=request.user)
     mission_open = Mission.objects.filter(client=clientinfo, status='open')
