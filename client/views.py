@@ -68,15 +68,18 @@ def logout_view(request):
 
     return redirect('clientPage')
 
+
 @login_required
 def settings(request):
     return render(request, 'client/settings.html')
+
 
 @login_required
 def clientpage(request):
     freelancer = Service.objects.all()
     count = Service.objects.count()
     return render(request, 'client/clientPage.html', {'freelancer': freelancer, 'count': count})
+
 
 @login_required
 def profileC(request):
@@ -96,7 +99,6 @@ def freelance_detail(request, pk):
     return render(request, 'client/freelancer_detail.html')
 
 
-
 @login_required
 def addMission(request):
     if request.method == 'POST':
@@ -110,19 +112,34 @@ def addMission(request):
         else:
             print("Form errors:", form.errors)  # ADD THIS LINE
     else:
-         form = MissionForm()
+        form = MissionForm()
 
-    return render(request, "client/addMission.html",{'form': form})
+    return render(request, "client/addMission.html", {'form': form})
+
 
 @login_required
-def acceptMission(request,pk):
+def acceptMission(request, pk, application_id):
+    mission = get_object_or_404(Mission, id=pk)
+    application = get_object_or_404(Application, id=application_id, mission=mission)
 
-    return  render(request,"client/clientPage.html")
+    if request.method == 'POST':
+        application.status = 'accepted'
+        application.save()
 
+        Application.objects.filter(mission=mission).exclude(id=application.id).update(status='rejected')
 
+        mission.status = 'in_progress'
+        mission.save()
+
+    return redirect("client/profileC.html.html")
 
 
 @login_required()
-def rejectMission(request,pk):
-    print(pk)
-    return render(request, "client/clientPage.html")
+def rejectMission(request, pk, application_id):
+    application = get_object_or_404(Application, id=application_id, mission=mission)
+
+    if request.method == 'POST':
+        application.status = 'rejected'
+        application.save()
+
+    return redirect( "client/clientPage.html")

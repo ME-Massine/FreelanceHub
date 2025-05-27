@@ -21,7 +21,8 @@
 
                 <div class="row mt-4">
                     <div class="col-md-4">
-                        <p><strong>Budget:</strong> {{ mission.price }}€/Hour <span class="badge bg-secondary ">Hourly Rate</span></p>
+                        <p><strong>Budget:</strong> {{ mission.price }}€/Hour <span class="badge bg-secondary ">Hourly Rate</span>
+                        </p>
 
                     </div>
                     <div class="col-md-4">
@@ -52,15 +53,17 @@
                                 <div class="d-flex justify-content-between">
                                     <strong>@{{ a.applicant }}</strong>
                                     <small class="text-muted">{{ a.created_at|naturaltime }}</small>
-                                    <form method="POST" action="{% url 'client:accept'  mission.id  %}">
-                                        {% csrf_token %}
-                                        <input type="submit" value="Accept" name="accept">
+                                    {% if mission.status == "open" %}
+                                        <form method="POST" action="{% url 'client:accept' mission.id a.id %}">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Accept" name="accept">
 
-                                    </form>
-                                    <form method="POST" action="{% url 'client:reject' mission.id %}">
-                                        {% csrf_token %}
-                                        <input type="submit" value="Reject" name="reject">
-                                    </form>
+                                        </form>
+                                        <form method="POST" action="{% url 'client:reject' mission.id a.id %}">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Reject" name="reject">
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <p class="mb-1 mt-1">&emsp;&emsp;{{ a.content }}</p>
                             </div>
@@ -76,9 +79,9 @@
                         {% csrf_token %}
                         <div class="form-group">
                             {% if err %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ err }}
-                            </div>
+                                <div class="alert alert-danger" role="alert">
+                                    {{ err }}
+                                </div>
                             {% endif %}
                             <label for="commentTextarea" class="form-label">Application Message</label>
                             <textarea class="form-control" id="commentTextarea" name="content" rows="3"
@@ -87,7 +90,6 @@
                         <button type="submit" class="btn btn-primary mt-2">Submit Application</button>
                     </form>
                 {% endif %}
-
 
 
             </div>
