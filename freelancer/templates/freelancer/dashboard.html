@@ -6,75 +6,144 @@
 
 {% block content %}
 
+    <!-- Popover JS -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            popoverTriggerList.map(function (popoverTriggerEl) {
                 return new bootstrap.Popover(popoverTriggerEl);
             });
         });
     </script>
+
+    <!-- Custom Styles -->
     <style>
-        .custom-popover {
-            --bs-popover-max-width: 220px;
-            --bs-popover-border-color: #6f42c1;
-            --bs-popover-header-bg: #6f42c1;
-            --bs-popover-header-color: #fff;
-            --bs-popover-body-padding-x: 1rem;
-            --bs-popover-body-padding-y: .5rem;
-            --bs-popover-bg: #fff;
+        body {
+            background-color: #f4f6f9;
+            color: #333;
         }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #1a1a1a;
+        }
+
+
+        .card-text {
+            color: #555;
+        }
+
+        .badge {
+            background-color: #6f42c1;
+            color: #fff;
+        }
+
+        .text-purple {
+            color: #6f42c1 !important;
+        }
+
+        .btn-primary {
+            background-color: #6f42c1;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a35a0;
+        }
+
+        .btn-view {
+            background-color: #6f42c1;
+            border: none;
+            color: #fff !important;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-view:hover {
+            background-color: #5a35a0;
+            color: #fff !important;
+            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
+        }
+
+        .bg-light {
+            background-color: #f0f0f0 !important;
+            color: #555 !important;
+        }
+
     </style>
 
-
+    <!-- Main Container -->
     <div class="container mt-4">
-        <h4 class="mb-4">
-            <span class="badge bg-secondary">{{ count }}</span> Results
+        <h4 class="mb-4 d-flex align-items-center gap-2">
+            <span class="badge badge-custom px-3 py-2">{{ count }}</span>
+            <span class="text-muted">Available Missions</span>
         </h4>
 
-        <div class="row">
+        <div class="row g-4">
             {% for m in missions %}
-                <div class="col-md-4 mb-4">
-                    <div class="card position-relative d-flex flex-column" style="width: 100%; height: 300px;">
-                        <span class="badge text-uppercase position-absolute {{ m.get_level_badge_class }}"
-                              style="top: -10px; left: 10px; font-size: 0.8rem; padding: 0.4em 0.7em;">
-                            {{ m.level|title }}
-                        </span>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card mission-card card-hover h-100 shadow-sm border-0 rounded-4">
+                        <div class="card-body d-flex flex-column justify-content-between pt-5 px-4 pb-4">
 
-                        <div class="card-body pt-4 d-flex flex-column" style="flex: 1 1 auto;">
-                            <div style="flex: 1 1 auto; overflow: auto;">
-                                <h5 class="card-title">{{ m.title }}</h5>
-                                <p class="card-text">{{ m.description|truncatewords:15 }}</p>
+                            <!-- Level Badge -->
+                            <span class="badge {{ m.get_level_badge_class }} position-absolute"
+                                  style="top: 15px; right: 15px; z-index: 1; font-size: 0.75rem; padding: 0.4em 0.75em; border-radius: 50px;">
+                                {{ m.level|title }}
+                            </span>
 
-                                <span tabindex="0"
-                                      role="button"
-                                      data-bs-toggle="popover"
-                                      data-bs-trigger="focus"
-                                      data-bs-html="true"
-                                      data-bs-title="Contact Info"
-                                      data-bs-custom-class="custom-popover"
-                                      data-bs-content="<strong>Phone:</strong> {{ m.client.phone_number }}<br><strong>Company:</strong> {{ m.client.company_name }}"
-                                      class="text-purple fw-semibold"
-                                      style="cursor: pointer;">
-                @{{ m.client.user.username }}
-            </span>
 
-                                <h5 class="text-success fw-bold">
-                                    {{ m.price }}$/hour | {{ m.proposal_count }}
-                                    proposal{{ m.proposal_count|pluralize }}
-                                </h5>
-
-                                <div class="d-inline-block px-3 py-1 mt-2 text-muted bg-light rounded-pill"
-                                     style="background-color: #e0e0e0;">
-                                    {{ m.get_category_display }}
-                                </div>
+                            <!-- Title & Description -->
+                            <div>
+                                <h5 class="card-title mb-2">{{ m.title }}</h5>
+                                <p class="card-text text-muted-small mb-3">{{ m.description|truncatewords:18 }}</p>
                             </div>
 
-                            <!-- Fixed bottom button -->
-                            <div class="d-flex justify-content-end mt-auto pt-3">
-                                <a href="{% url 'freelancer:mission_detail' m.pk %}" class="btn btn-primary">View
-                                    Details</a>
+                            <!-- Client Info with Popover -->
+                            <div class="mb-3">
+                            <span tabindex="0"
+                                  role="button"
+                                  data-bs-toggle="popover"
+                                  data-bs-trigger="focus"
+                                  data-bs-html="true"
+                                  data-bs-title="Contact Info"
+                                  data-bs-custom-class="custom-popover"
+                                  data-bs-content="<strong>Phone:</strong> {{ m.client.phone_number }}<br><strong>Company:</strong> {{ m.client.company_name }}"
+                                  class="text-purple fw-semibold username-hover"
+                                  style="cursor: pointer;">
+                                @{{ m.client.user.username }}
+                            </span>
                             </div>
+
+                            <!-- Price & Proposals -->
+                            <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
+                                <span class="price-tag">{{ m.price }}$/hour</span>
+                                <span class="text-muted-small">{{ m.proposal_count }} proposal{{ m.proposal_count|pluralize }}</span>
+                            </div>
+
+                            <!-- Category Tag -->
+                            <div class="mb-3">
+                                <span class="mission-tag">{{ m.get_category_display }}</span>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <div class="text-end mt-auto">
+                                <a href="{% url 'freelancer:mission_detail' m.pk %}"
+                                   class="btn btn-view rounded-pill px-4 py-2">
+                                    View Details
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>

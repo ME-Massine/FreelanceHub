@@ -5,21 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FreelanceHub</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-
+    <!-- Global Style -->
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #1a1a1a;
+        }
+
+        .card-text {
+            color: #555;
+        }
+
+        .badge {
+            background-color: #6f42c1;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #6f42c1;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a35a0;
+        }
+
+        .text-purple {
+            color: #6f42c1 !important;
+        }
+
+        .bg-light {
+            background-color: #f0f0f0 !important;
+            color: #555 !important;
+        }
+
+        .rounded-pill {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Custom Popover */
+        .custom-popover {
+            --bs-popover-bg: #ffffff;
+            --bs-popover-border-color: #6f42c1;
+            --bs-popover-header-bg: #6f42c1;
+            --bs-popover-header-color: #ffffff;
+            --bs-popover-body-color: #333;
+        }
+
+        /* Optional spacing improvements */
+        main {
+            padding-bottom: 3rem;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        /* Optional navbar background */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
 <body>
+
 {% block nav %}
     {% include 'navbar.html' with minimal_nav=False logged_in=False search=False %}
 {% endblock %}
+
 <main>
     {% block content %}{% endblock %}
 </main>
