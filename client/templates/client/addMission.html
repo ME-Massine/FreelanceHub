@@ -1,0 +1,75 @@
+{% extends 'main.html' %}
+
+{% block nav %}
+    {% include "navbar.html" with logged_in=True search=True %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-5" style="max-width: 700px;">
+    <div class="card shadow-sm p-4">
+        <h2 class="mb-4 text-center">Post a New Mission</h2>
+        <form method="POST" action="" novalidate>
+            {% csrf_token %}
+
+            <div class="form-floating mb-4">
+                <input type="text" name="title" class="form-control" id="id_title" placeholder="Logo Design" required maxlength="100"
+                       value="{{ form.title.value|default:'' }}" aria-describedby="titleHelp">
+                <label for="id_title">Mission Title</label>
+                <div id="titleHelp" class="form-text">Keep it concise and clear, e.g. "Logo Design".</div>
+            </div>
+
+            <div class="form-floating mb-4">
+                <textarea name="description" class="form-control" id="id_description" placeholder="Describe your mission in detail" required
+                          style="height: 120px;">{{ form.description.value|default:'' }}</textarea>
+                <label for="id_description">Description</label>
+                <div class="form-text">Use bullet points, formatting, and be detailed about your mission.</div>
+            </div>
+
+            <!-- Category Dropdown -->
+            <div class="form-floating mb-4">
+                <select name="category" id="id_category" class="form-select" required>
+                    <option value="" disabled selected>Choose a category</option>
+                    <option value="web_dev">Web Development</option>
+                    <option value="design">Design</option>
+                    <option value="writing">Writing</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="other">other</option>
+                </select>
+                <label for="id_category">Category</label>
+            </div>
+
+
+            <div class="form-floating mb-4">
+                <select name="level" id="id_level" class="form-select" required>
+                    <option value="" disabled selected>Select level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="expert">Expert</option>
+                </select>
+                <label for="id_level">Level</label>
+                <div class="form-text">Select your expertise level for this service.</div>
+            </div>
+
+            <div class="form-floating mb-4">
+                <input type="number" name="price" class="form-control" id="id_price" placeholder="50.00" step="0.01" min="0" required
+                       value="{{ form.price.value|default:'' }}" aria-describedby="priceHelp">
+                <label for="id_price">Price (USD)</label>
+                <div id="priceHelp" class="form-text">Set your price in USD, e.g., 50.00</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 fw-semibold" style="transition: background-color 0.3s;">
+                Post Mission
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('id_image_url')?.addEventListener('input', function(e) {
+        const img = document.getElementById('imagePreview');
+        img.src = e.target.value || 'https://placehold.co/600x400';
+    });
+</script>
+
+{% endblock %}

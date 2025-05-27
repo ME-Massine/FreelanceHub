@@ -34,7 +34,6 @@
 
                 <hr>
 
-                <a href="#" class="btn btn-success btn-lg">Apply Now</a>
             </div>
         </div>
 
@@ -53,6 +52,15 @@
                                 <div class="d-flex justify-content-between">
                                     <strong>@{{ a.applicant }}</strong>
                                     <small class="text-muted">{{ a.created_at|naturaltime }}</small>
+                                    <form method="POST" action="{% url 'client:accept'  mission.id  %}">
+                                        {% csrf_token %}
+                                        <input type="submit" value="Accept" name="accept">
+
+                                    </form>
+                                    <form method="POST" action="{% url 'client:reject' mission.id %}">
+                                        {% csrf_token %}
+                                        <input type="submit" value="Reject" name="reject">
+                                    </form>
                                 </div>
                                 <p class="mb-1 mt-1">&emsp;&emsp;{{ a.content }}</p>
                             </div>
@@ -63,21 +71,24 @@
                 {% endfor %}
 
                 <hr>
-
-                <form method="POST" action="" class="mb-4">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {% if err %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ err }}
+                {% if user.groups.all.0.name == "Freelancer" %}
+                    <form method="POST" action="" class="mb-4">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {% if err %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ err }}
+                            </div>
+                            {% endif %}
+                            <label for="commentTextarea" class="form-label">Application Message</label>
+                            <textarea class="form-control" id="commentTextarea" name="content" rows="3"
+                                      placeholder="Write your application message..."></textarea>
                         </div>
-                        {% endif %}
-                        <label for="commentTextarea" class="form-label">Application Message</label>
-                        <textarea class="form-control" id="commentTextarea" name="content" rows="3"
-                                  placeholder="Write your application message..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-2">Submit Application</button>
-                </form>
+                        <button type="submit" class="btn btn-primary mt-2">Submit Application</button>
+                    </form>
+                {% endif %}
+
+
 
             </div>
         </div>

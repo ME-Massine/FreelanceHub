@@ -27,7 +27,7 @@ class Mission(models.Model):
         ('design', 'Design'),
         ('writing', 'Writing'),
         ('marketing', 'Marketing'),
-        ('other', 'Other'),
+        ('other', 'other'),
     ]
 
     STATUS_CHOICES = [
@@ -55,9 +55,15 @@ class Mission(models.Model):
         }.get(self.level, 'bg-secondary')
 
 class Application(models.Model):
+    STATUS_CHOICES = [
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+        ('none', 'None'),
+    ]
+
     mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applicant')
-
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='none')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

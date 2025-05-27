@@ -12,6 +12,11 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),
 
     path('service/<int:pk>/', views.freelance_detail, name='freelance_detail'),
+    path('add-mission/' , views.addMission, name='add-mission'),
+
+    path('accept/<int:pk>',views.acceptMission, name='accept'),
+
+    path('reject/<int:pk>',views.rejectMission, name='reject'),
 
 
 

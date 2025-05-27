@@ -73,6 +73,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 {% if request.user.groups.first.name == 'client' %}
+                                    <li><a class="dropdown-item" href="{% url 'client:add-mission' %}">Add Your Mission</a></li>
                                     <li><a class="dropdown-item" href="{% url 'client:profile' %}">View Profile</a></li>
                                     <li><a class="dropdown-item" href="{% url 'client:settings' %}">Settings</a></li>
                                 {% else %}

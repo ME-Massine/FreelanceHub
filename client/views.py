@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from client.forms import SignupForm
+from client.forms import SignupForm, MissionForm
 from django.contrib.auth.decorators import login_required
 
 from freelancer.models import Freelancer, Service
@@ -94,3 +94,35 @@ def profileC(request):
 @login_required
 def freelance_detail(request, pk):
     return render(request, 'client/freelancer_detail.html')
+
+
+
+@login_required
+def addMission(request):
+    if request.method == 'POST':
+        form = MissionForm(request.POST)
+
+        if form.is_valid():
+            mission = form.save(commit=False)
+            mission.client = request.user.client
+            mission.save()
+            return redirect('client:profile')
+        else:
+            print("Form errors:", form.errors)  # ADD THIS LINE
+    else:
+         form = MissionForm()
+
+    return render(request, "client/addMission.html",{'form': form})
+
+@login_required
+def acceptMission(request,pk):
+
+    return  render(request,"client/clientPage.html")
+
+
+
+
+@login_required()
+def rejectMission(request,pk):
+    print(pk)
+    return render(request, "client/clientPage.html")
