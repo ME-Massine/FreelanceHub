@@ -158,7 +158,6 @@ def profile_edit(request):
     clientinfo = get_object_or_404(Client, user=request.user)
     post_data = request.POST.copy()
 
-
     form = ProfileFormC(post_data, request.FILES, instance=clientinfo)
 
     if form.is_valid():
@@ -166,6 +165,7 @@ def profile_edit(request):
         return redirect('client:profile')
     else:
         print("Form errors:", form.errors)
+
         return render(request, 'client/profileC.html', {
             'clientinfo': clientinfo,
             'form': form,
