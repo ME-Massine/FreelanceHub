@@ -5,103 +5,20 @@
     <title>Chat Room</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <style>
-        body {
-            background: #f8f9fa;
-        }
-
-        .chat-container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            height: 80vh;
-        }
-
-        .chat-header {
-            padding: 1rem;
-            border-bottom: 1px solid #ddd;
-            font-weight: 600;
-            font-size: 1.25rem;
-            background: #007bff;
-            color: white;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        #chat-log {
-            flex-grow: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            background: #e9ecef;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .message {
-            max-width: 75%;
-            margin-bottom: 0.75rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            clear: both;
-            font-size: 1rem;
-            line-height: 1.3;
-            word-wrap: break-word;
-        }
-
-        .message .sender {
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
-        .message.sent {
-            background: #0d6efd;
-            color: white;
-            float: right;
-            border-bottom-right-radius: 0;
-        }
-
-        .message.received {
-            background: #f1f3f5;
-            color: #212529;
-            float: left;
-            border-bottom-left-radius: 0;
-        }
-
-        .chat-input-area {
-            display: flex;
-            padding: 1rem;
-            gap: 0.5rem;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            background: white;
-        }
-
-        #chat-message-input {
-            flex-grow: 1;
-            border-radius: 20px;
-            border: 1px solid #ced4da;
-            padding-left: 1rem;
-            font-size: 1rem;
-        }
-
-        #send {
-            border-radius: 20px;
-            width: 100px;
-        }
-
-        /* Scrollbar styling */
-        #chat-log::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #chat-log::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-        }
+        /* your existing styles */
+        body { background: #f8f9fa; }
+        .chat-container { max-width: 600px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; }
+        .chat-header { padding: 1rem; border-bottom: 1px solid #ddd; font-weight: 600; font-size: 1.25rem; background: #007bff; color: white; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+        #chat-log { flex-grow: 1; padding: 1rem; overflow-y: auto; background: #e9ecef; border-bottom: 1px solid #ddd; }
+        .message { max-width: 75%; margin-bottom: 0.75rem; padding: 0.5rem 1rem; border-radius: 20px; clear: both; font-size: 1rem; line-height: 1.3; word-wrap: break-word; }
+        .message .sender { font-weight: 700; margin-bottom: 0.25rem; font-size: 0.85rem; opacity: 0.7; }
+        .message.sent { background: #0d6efd; color: white; float: right; border-bottom-right-radius: 0; }
+        .message.received { background: #f1f3f5; color: #212529; float: left; border-bottom-left-radius: 0; }
+        .chat-input-area { display: flex; padding: 1rem; gap: 0.5rem; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; background: white; }
+        #chat-message-input { flex-grow: 1; border-radius: 20px; border: 1px solid #ced4da; padding-left: 1rem; font-size: 1rem; }
+        #send { border-radius: 20px; width: 100px; }
+        #chat-log::-webkit-scrollbar { width: 8px; }
+        #chat-log::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.1); border-radius: 4px; }
     </style>
 </head>
 <body class="p-4">
@@ -119,11 +36,11 @@
     </div>
     <div class="chat-input-area">
         <input
-                id="chat-message-input"
-                type="text"
-                placeholder="Type your message..."
-                aria-label="Message input"
-                autocomplete="off"
+            id="chat-message-input"
+            type="text"
+            placeholder="Type your message..."
+            aria-label="Message input"
+            autocomplete="off"
         />
         <button id="send" class="btn btn-primary">Send</button>
     </div>
@@ -131,59 +48,66 @@
 
 <script>
     const roomName = "{{ room_name }}";
-    const username = "{{ request.user.username }}";
-    const receiver = "{{ receiver.username }}";
+    const receiverId = "{{ receiver_id }}";
+    const currentUser = "{{ request.user.username }}";
 
     const chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        'ws://' + window.location.host +
+        '/ws/chat/' + roomName + '/'
     );
 
-    chatSocket.onmessage = function (e) {
+    chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const chatLog = document.querySelector('#chat-log');
 
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
 
-        if (data.sender === username) {
-            messageDiv.classList.add('sent');
+        // Assign sent or received class
+        if (data.sender === currentUser) {
+            messageElement.classList.add('sent');
         } else {
-            messageDiv.classList.add('received');
+            messageElement.classList.add('received');
         }
 
-        messageDiv.innerHTML = `
-        <div class="sender">${data.sender}</div>
-        ${data.message}
-    `;
-        chatLog.appendChild(messageDiv);
+        // Structure to match CSS expected format
+        messageElement.innerHTML = `
+            <div class="sender">${data.sender}</div>
+            ${data.message}
+            <small class="text-muted d-block mt-1">${new Date(data.timestamp).toLocaleString()}</small>
+        `;
 
+        chatLog.appendChild(messageElement);
         chatLog.scrollTop = chatLog.scrollHeight;
     };
 
-    document.querySelector('#send').onclick = function () {
-        const input = document.querySelector('#chat-message-input');
-        if (input.value.trim() === '') return;
+    // Fix: use #send instead of #chat-message-submit
+    document.querySelector('#send').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value.trim();
+
+        if (!message) return;  // don't send empty messages
+
         chatSocket.send(JSON.stringify({
-            message: input.value,
-            sender: username,
-            receiver: receiver,
+            'message': message,
+            'receiver_id': receiverId
         }));
-        input.value = '';
-        input.focus();
+
+        messageInputDom.value = '';
     };
 
-    // Optional: send message on Enter key
-    document.querySelector('#chat-message-input').addEventListener('keypress', function (e) {
+    // Allow sending with Enter key
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();
             document.querySelector('#send').click();
         }
-    });
-    window.onload = function () {
+    };
+
+    // Optional: Scroll to bottom on page load
+    window.onload = () => {
         const chatLog = document.querySelector('#chat-log');
         chatLog.scrollTop = chatLog.scrollHeight;
     };
-
 </script>
 </body>
 </html>
