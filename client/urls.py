@@ -18,4 +18,6 @@ urlpatterns = [
 
     path('reject/<int:pk>/<int:application_id>/',views.rejectMission, name='reject'),
 
+    path('profile/edit/', views.profile_edit, name='profile_edit'),
+
 ]
