@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 
+{% load filename_filters %}
 {% load humanize %}
 
 {% block nav %}
@@ -37,10 +38,53 @@
 
             </div>
         </div>
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Deliver Work</h5>
+            </div>
+            <div class="card-body">
+                {% if mission.status == "in_progress" and request.user.groups.first.name == 'freelancer' %}
+                    <form method="POST" enctype="multipart/form-data"
+                          action="{% url 'freelancer:deliver_review' mission.id %}">
+                        {% csrf_token %}
+                        {{ delivery_form.as_p }}
+                        <button type="submit" class="btn btn-success">Submit Delivery</button>
+                    </form>
+                {% endif %}
+                {% if mission.status == "in_progress" and request.user.groups.first.name == 'client' %}
+                    <h2>Reviews</h2>
+                    {% for review in mission.reviews.all %}
+                        <div class="review">
+                            <p><strong>Freelancer:</strong> {{ review.freelancer.user.username }}</p>
+                            <p><strong>Submitted at:</strong> {{ review.created_at }}</p>
+                            <p><strong>Comment:</strong> {{ review.content }}</p>
+
+                            {% if review.review_file %}
+                                <p><strong>File:</strong>
+                                    <a href="{{ review.review_file.url }}" download>
+                                        {{ review.review_file.name|cut:"reviews/" }}
+                                    </a>
+                                </p>
+                            {% else %}
+                                <p><em>No file submitted.</em></p>
+                            {% endif %}
+                        </div>
+                         <hr>
+                    {% empty %}
+                        <p>No reviews submitted yet.</p>
+
+                    {% endfor %}
+
+
+                {% endif %}
+            </div>
+        </div>
+
 
         <div class="card mt-4 shadow">
             <div class="card-header bg-light">
                 <h5 class="mb-0">Mission Applications</h5>
+
             </div>
             <div class="card-body">
 

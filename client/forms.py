@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from client.models import Mission, Client
+from client.models import Mission, Client, Reviews
 
 
 class SignupForm(UserCreationForm):
@@ -46,3 +46,8 @@ class ProfileFormC(forms.ModelForm):
                 'accept': 'image/*'
             })
         }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Reviews
+        fields = ['content', 'review_file']

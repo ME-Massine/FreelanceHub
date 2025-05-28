@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="fixed the service UI">
+      <change afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/current_missions.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/freelancer/templatetags/filename_filters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ProjetPython.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetPython.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freelancer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +30,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -154,6 +160,7 @@
       <workItem from="1748213571095" duration="1599000" />
       <workItem from="1748273206915" duration="15277000" />
       <workItem from="1748380214036" duration="176000" />
+      <workItem from="1748458290915" duration="4951000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />

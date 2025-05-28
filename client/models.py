@@ -71,10 +71,11 @@ class Application(models.Model):
 
 
 class Reviews(models.Model):
-    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='mission')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client')
-    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='freelancer')
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='reviews')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client_reviews')
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='freelancer_reviews')
 
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    review_file = models.FileField(upload_to='review_files/', null=True,blank = True)
+    review_file = models.FileField(upload_to='reviews/', blank=True, null=True)
+

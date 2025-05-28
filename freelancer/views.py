@@ -5,7 +5,8 @@ from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
-from client.models import Mission, Application
+from client.forms import ReviewForm, ReviewForm
+from client.models import Mission, Application, Reviews
 from .models import Freelancer, Service
 
 from .forms import ApplicationForm, ProfileForm, ServiceForm
@@ -36,25 +37,37 @@ def dashboard(request):
 def mission_detail(request, pk):
     mission = get_object_or_404(Mission, pk=pk)
     applications = Application.objects.filter(mission=pk)
+    reviews = Reviews.objects.filter(mission=mission)
     err = None
+
+    # Default both forms
+    application_form = ApplicationForm()
+    delivery_form = None
+
+    if mission.status == "in_progress":
+        delivery_form = ReviewForm()
+
     if request.method == 'POST':
-        exist = Application.objects.filter(applicant=request.user, mission=pk)
+        exist = Application.objects.filter(applicant=request.user, mission=pk).exists()
         if exist:
             err = "Already applied for this mission"
         else:
-            form = ApplicationForm(request.POST)
-            if form.is_valid():
-                application = form.save(commit=False)
+            application_form = ApplicationForm(request.POST)
+            if application_form.is_valid():
+                application = application_form.save(commit=False)
                 application.mission = mission
                 application.applicant = request.user
                 application.save()
                 return redirect('freelancer:mission_detail', pk=mission.id)
-    else:
-        form = ApplicationForm()
 
-    return render(request, 'freelancer/mission_detail.html',
-                  {'mission': mission, 'applications': applications, "err": err})
-
+    return render(request, 'freelancer/mission_detail.html', {
+        'mission': mission,
+        'applications': applications,
+        'err': err,
+        'reviews': reviews,
+        'application_form': application_form,
+        'delivery_form': delivery_form,
+    })
 
 @login_required
 def profileF(request):
@@ -117,6 +130,37 @@ def addService(request):
             service.save()
             return redirect('freelancer:profile')
     else:
-         form = ServiceForm()
+        form = ServiceForm()
 
     return render(request, "freelancer/addService.html", {'form': form})
+
+
+def current_missions(request):
+    freelancer = request.user  # Assuming `request.user` is the freelancer
+    current_applications = Application.objects.select_related('mission').filter(
+        applicant=freelancer,
+        status='accepted',
+        mission__status='in_progress'
+    )
+
+    return render(request, 'freelancer/current_missions.html', {
+        'applications': current_applications
+    })
+
+
+def deliver_review(request, mission_id):
+    mission = get_object_or_404(Mission, id=mission_id)
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.mission = mission
+            review.freelancer = request.user.freelancer
+            review.client = mission.client
+            review.save()
+            return redirect('freelancer:mission_detail', pk=mission.id)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'freelancer/mission_detail.html', {'form': form, 'mission': mission})
