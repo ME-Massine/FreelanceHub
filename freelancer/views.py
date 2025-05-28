@@ -2,11 +2,13 @@ import math
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from client.forms import ReviewForm, ReviewForm
 from client.models import Mission, Application, Reviews
+from utils.remote_ai import together_query, convert_to_html_bullets
 from .models import Freelancer, Service
 
 from .forms import ApplicationForm, ProfileForm, ServiceForm
@@ -38,6 +40,7 @@ def mission_detail(request, pk):
     mission = get_object_or_404(Mission, pk=pk)
     applications = Application.objects.filter(mission=pk)
     reviews = Reviews.objects.filter(mission=mission)
+    # tasks = extract_tasks_from_description(mission.description)
     err = None
 
     # Default both forms
@@ -67,6 +70,7 @@ def mission_detail(request, pk):
         'reviews': reviews,
         'application_form': application_form,
         'delivery_form': delivery_form,
+        # 'tasks': tasks,
     })
 
 @login_required

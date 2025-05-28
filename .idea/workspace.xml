@@ -4,13 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="updated styles">
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="final version of the client/freelancer page">
+      <change afterPath="$PROJECT_DIR$/utils/remote_ai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetPython/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/settings.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freelancer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +158,7 @@
       <workItem from="1748213571095" duration="1599000" />
       <workItem from="1748273206915" duration="15277000" />
       <workItem from="1748380214036" duration="176000" />
-      <workItem from="1748458290915" duration="7916000" />
+      <workItem from="1748458290915" duration="16472000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -283,7 +288,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748464014024</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="final version of the client/freelancer page">
+      <option name="closed" value="true" />
+      <created>1748466390072</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1748466390072</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -334,6 +347,7 @@
     <MESSAGE value="fixed the service UI" />
     <MESSAGE value="Encounters between client and freelancer" />
     <MESSAGE value="updated styles" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated styles" />
+    <MESSAGE value="final version of the client/freelancer page" />
+    <option name="LAST_COMMIT_MESSAGE" value="final version of the client/freelancer page" />
   </component>
 </project>

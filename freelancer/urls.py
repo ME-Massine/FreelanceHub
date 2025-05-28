@@ -12,4 +12,6 @@ urlpatterns = [
     path('missions/current/', views.current_missions, name='current_missions'),
 
     path('missions/<int:mission_id>/deliver/', views.deliver_review, name='deliver_review'),
+    path('test/', views.test, name='test'),
+
 ]
