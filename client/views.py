@@ -176,5 +176,18 @@ def profile_edit(request):
         })
 
 
+@login_required
+def add_revision(request, review_id):
+    review = get_object_or_404(Reviews, pk=review_id)
+    if request.method == 'POST' and request.user.groups.filter(name='client').exists():
+        comment = request.POST.get('comment')
+        if comment:
+            ClientRevision.objects.create(
+                review=review,
+                comment=comment,
+                author=request.user,
+            )
+        return redirect('mission_detail', mission_id=review.mission.id)
+    return redirect('mission_detail', mission_id=review.mission.id)
 
 

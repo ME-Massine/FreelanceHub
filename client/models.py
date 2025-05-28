@@ -71,11 +71,20 @@ class Application(models.Model):
 
 
 class Reviews(models.Model):
-    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='reviews')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client_reviews')
-    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='freelancer_reviews')
-
+    freelancer = models.ForeignKey(User, on_delete=models.CASCADE)
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name="reviews")
     content = models.TextField()
+    review_file = models.FileField(upload_to='reviews/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    review_file = models.FileField(upload_to='reviews/', blank=True, null=True)
+
+    # Add this for client response
+    client_comment = models.TextField(blank=True, null=True)
+    is_revision_requested = models.BooleanField(default=False)
+
+class ClientRevision(models.Model):
+    review = models.ForeignKey(Reviews, related_name='client_revisions', on_delete=models.CASCADE)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)  # The client
+
 
