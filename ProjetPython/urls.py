@@ -26,6 +26,8 @@ urlpatterns = [
     path('client/', include(('client.urls', 'client'), namespace='client')),
     path('freelancer/', include(('freelancer.urls', 'freelancer'), namespace='freelancer')),
     path('', views.home, name='home'),
+    path('', include('chat.urls')),
+
     
 
 ]

@@ -4,13 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="fixed the service UI">
-      <change afterPath="$PROJECT_DIR$/chat/consumers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/routing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/templates/chat/display.html" afterDir="false" />
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="testing a chat app">
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chat/templates/chat/room.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chat/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetPython/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/asgi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetPython/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetPython/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/consumers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/routing.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/routing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/templates/chat/display.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -87,6 +94,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrateur\PycharmProjects\FreelanceHub" />
       <recent name="C:\Users\Administrateur\PycharmProjects\ProjetPython\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -109,7 +117,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
+      <option name="port" value="8001" />
       <option name="host" value="" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
@@ -154,6 +162,8 @@
       <workItem from="1748213571095" duration="1599000" />
       <workItem from="1748273206915" duration="15277000" />
       <workItem from="1748380214036" duration="176000" />
+      <workItem from="1748431471820" duration="5320000" />
+      <workItem from="1748449201811" duration="877000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -267,7 +277,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748389843644</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="testing a chat app">
+      <option name="closed" value="true" />
+      <created>1748391883164</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1748391883164</updated>
+    </task>
+    <task id="LOCAL-00016" summary="testing a chat app">
+      <option name="closed" value="true" />
+      <created>1748391914149</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1748391914149</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,6 +342,17 @@
     <MESSAGE value="fixed the profile UI and added the creating post functionality" />
     <MESSAGE value="Users can now upload their own profile picture" />
     <MESSAGE value="fixed the service UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed the service UI" />
+    <MESSAGE value="testing a chat app" />
+    <option name="LAST_COMMIT_MESSAGE" value="testing a chat app" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/freelancer/admin.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
