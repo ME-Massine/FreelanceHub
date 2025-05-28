@@ -44,6 +44,7 @@
             background-color: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
+
         .card {
             background-color: #ffffff;
             border: 1px solid #e1e1e1;
@@ -93,7 +94,7 @@
         <!-- Left: Fixed Profile Info -->
         <div class="left-panel text-center">
 
-            <img src="https://placehold.co/150x150" alt="Profile Image"
+            <img src="{{ clientinfo.pfp.url }}" alt="Profile Image"
                  class="rounded-circle mb-3" style="width: 150px; height: 150px;">
             <h4 class=" fw-bold text-primary">@{{ clientinfo.user.username|default:user.username }}</h4>
             <div class="mb-2 text-muted">
@@ -109,6 +110,66 @@
                aria-controls="offcanvasExample">
                 Edit profile
             </a>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+                 aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'client:profile_edit' %}">
+                        {% csrf_token %}
+
+                        {% if form %}
+                            <label for="id_pfp" class="form-label fw-semibold">Profile Picture</label>
+
+                            <div class="d-flex flex-column align-items-center mb-3">
+                                <img id="pfpPreview" src="{{ clientinfo.pfp.url }}" alt="Profile Picture Preview"
+                                     class="rounded-circle mb-3"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+
+                                <input type="file" id="id_pfp" name="pfp" accept="image/*" class="form-control"
+                                       onchange="previewPfp(this)"
+                                       style="max-width: 150px;">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_location" class="form-label">Company Name</label>
+                                {{ form.company_name }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_bio" class="form-label">Phone Number</label>
+                                {{ form.phone_number }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_portfolio_url" class="form-label">Country</label>
+                                {{ form.country }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_portfolio_url" class="form-label">Bio</label>
+                                {{ form.bio }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_portfolio_url" class="form-label">Email</label>
+                                {{ form.email }}
+                            </div>
+
+
+
+
+                            <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                        {% else %}
+                            <p>No form available.</p>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Right: Scrollable Details -->
@@ -307,20 +368,17 @@
                     {% endfor %}
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- Offcanvas Edit Section -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
-         aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Edit</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                    aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <p>Edit form goes here.</p>
-        </div>
-    </div>
+    <script>
+        function previewPfp(input) {
+            if (input.files && input.files[0]) {
+                const preview = document.getElementById('pfpPreview');
+                preview.src = URL.createObjectURL(input.files[0]);
+            }
+        }
+    </script>
+
+
 {% endblock content %}

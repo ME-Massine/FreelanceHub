@@ -3,7 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from client.forms import SignupForm, MissionForm
+from django.views.decorators.http import require_POST
+
+from client.forms import SignupForm, MissionForm, ProfileFormC
 from django.contrib.auth.decorators import login_required
 
 from freelancer.models import Freelancer, Service
@@ -88,10 +90,16 @@ def profileC(request):
     mission_progress = Mission.objects.filter(client=clientinfo, status='in_progress')
     mission_complete = Mission.objects.filter(client=clientinfo, status='completed')
 
-    return render(request, 'client/profileC.html',
-                  {'clientinfo': clientinfo,
-                   'mission_open': mission_open, 'mission_complete': mission_complete,
-                   'mission_progress': mission_progress})
+    form = ProfileFormC(instance=clientinfo)  # add this line
+
+    return render(request, 'client/profileC.html', {
+        'clientinfo': clientinfo,
+        'mission_open': mission_open,
+        'mission_progress': mission_progress,
+        'mission_complete': mission_complete,
+        'form': form,  # pass form to template
+    })
+
 
 
 @login_required
@@ -143,3 +151,23 @@ def rejectMission(request, pk, application_id):
         application.save()
 
     return redirect( "client/clientPage.html")
+
+
+@require_POST
+def profile_edit(request):
+    clientinfo = get_object_or_404(Client, user=request.user)
+    post_data = request.POST.copy()
+
+    form = ProfileFormC(post_data, request.FILES, instance=clientinfo)
+
+    if form.is_valid():
+        form.save()
+        return redirect('client:profile')
+    else:
+        print("Form errors:", form.errors)
+
+        return render(request, 'client/profileC.html', {
+            'clientinfo': clientinfo,
+            'form': form,
+            'form_errors': form.errors,
+        })
