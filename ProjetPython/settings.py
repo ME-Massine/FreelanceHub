@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
     'client',
     'freelancer',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'channels',
     'chat',
+
 ]
 
 ASGI_APPLICATION = "ProjetPython.asgi.application"
