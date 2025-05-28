@@ -104,7 +104,10 @@ def profileC(request):
 
 @login_required
 def freelance_detail(request, pk):
-    return render(request, 'client/freelancer_detail.html')
+    service = get_object_or_404(Service, pk=pk)
+
+
+    return render(request, 'client/freelancer_detail.html',{'service': service})
 
 
 @login_required
