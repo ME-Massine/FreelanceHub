@@ -1,0 +1,317 @@
+Index: freelancer/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import math\r\nfrom django.contrib.auth import logout\r\nfrom django.contrib.auth.decorators import login_required\r\nfrom django.db.models import Count\r\nfrom django.shortcuts import render, redirect, get_object_or_404\r\nfrom django.views.decorators.http import require_POST\r\n\r\nfrom client.models import Mission, Application\r\nfrom .models import Freelancer, Service\r\n\r\nfrom .forms import ApplicationForm, ProfileForm, ServiceForm\r\n\r\n\r\n# Create your views here.\r\ndef logout_view(request):\r\n    if request.method == 'POST':\r\n        logout(request)\r\n        return redirect('home')\r\n\r\n    return redirect('clientPage')\r\n\r\n\r\ndef settings(request):\r\n    return render(request, 'freelancer/settings.html')\r\n\r\n\r\n@login_required\r\ndef dashboard(request):\r\n    count = Mission.objects.count()\r\n    missions = Mission.objects.annotate(proposal_count=Count('applications'))\r\n\r\n    return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})\r\n\r\n\r\n@login_required\r\ndef mission_detail(request, pk):\r\n    mission = get_object_or_404(Mission, pk=pk)\r\n    applications = Application.objects.filter(mission=pk)\r\n    err = None\r\n    if request.method == 'POST':\r\n        exist = Application.objects.filter(applicant=request.user, mission=pk)\r\n        if exist:\r\n            err = \"Already applied for this mission\"\r\n        else:\r\n            form = ApplicationForm(request.POST)\r\n            if form.is_valid():\r\n                application = form.save(commit=False)\r\n                application.mission = mission\r\n                application.applicant = request.user\r\n                application.save()\r\n                return redirect('freelancer:mission_detail', pk=mission.id)\r\n    else:\r\n        form = ApplicationForm()\r\n\r\n    return render(request, 'freelancer/mission_detail.html',\r\n                  {'mission': mission, 'applications': applications, \"err\": err})\r\n\r\n\r\n@login_required\r\ndef profileF(request):\r\n    freelancerinfo = get_object_or_404(Freelancer, user=request.user)\r\n    language_dict = dict(Freelancer.LANGUAGE_CHOICES)\r\n    full_languages = [language_dict.get(code, code) for code in freelancerinfo.languages]\r\n    selected_language_codes = freelancerinfo.languages or []\r\n\r\n    decimal, integer = math.modf(freelancerinfo.rating)\r\n    fullstar = int(integer)\r\n    halfstar = 1 if decimal >= 0.5 else 0\r\n    emptystar = 5 - fullstar - halfstar\r\n\r\n    form = ProfileForm(instance=freelancerinfo)\r\n\r\n    Services = Service.objects.filter(user=request.user)\r\n\r\n    return render(request, 'freelancer/profileF.html', {\r\n        'freelancerinfo': freelancerinfo,\r\n        'fullstar': range(fullstar),\r\n        'halfstar': halfstar,\r\n        'emptystar': range(emptystar),\r\n        'form': form,\r\n        'full_languages': full_languages,\r\n        'selected_language_codes': selected_language_codes,\r\n        \"Services\": Services,\r\n    })\r\n\r\n\r\n@require_POST\r\ndef profile_edit(request):\r\n    freelancerinfo = get_object_or_404(Freelancer, user=request.user)\r\n    post_data = request.POST.copy()\r\n\r\n    # Use getlist to get all language codes submitted (from hidden inputs)\r\n    lang_list = post_data.getlist('languages')\r\n    post_data.setlist('languages', lang_list)\r\n\r\n    form = ProfileForm(post_data, request.FILES, instance=freelancerinfo)\r\n\r\n    if form.is_valid():\r\n        form.save()\r\n        return redirect('freelancer:profile')\r\n    else:\r\n        print(\"Form errors:\", form.errors)\r\n        return render(request, 'freelancer/profileF.html', {\r\n            'freelancerinfo': freelancerinfo,\r\n            'form': form,\r\n            'form_errors': form.errors,\r\n        })\r\n\r\n\r\n@login_required\r\ndef addService(request):\r\n    if request.method == 'POST':\r\n        form = ServiceForm(request.POST)\r\n        if form.is_valid():\r\n            service = form.save(commit=False)\r\n            service.user = request.user\r\n            service.save()\r\n            return redirect('freelancer:profile')\r\n    else:\r\n         form = ServiceForm()\r\n\r\n    return render(request, \"freelancer/addService.html\", {'form': form})\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/freelancer/views.py b/freelancer/views.py
+--- a/freelancer/views.py	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/freelancer/views.py	(date 1748458220901)
+@@ -26,8 +26,8 @@
+ 
+ @login_required
+ def dashboard(request):
+-    count = Mission.objects.count()
+-    missions = Mission.objects.annotate(proposal_count=Count('applications'))
++    missions = Mission.objects.filter(status='open').annotate(proposal_count=Count('applications'))
++    count = missions.count()
+ 
+     return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
+ 
+Index: client/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.contrib.auth.models import User\r\nfrom django.db import models\r\nfrom django_countries.fields import CountryField\r\n\r\n\r\n# Create your models here.\r\nclass Client(models.Model):\r\n\r\n    user = models.OneToOneField(User, on_delete=models.CASCADE)\r\n\r\n    pfp = models.ImageField(upload_to='uploads/', default='uploads/default.jpg')\r\n    company_name = models.CharField(max_length=255, default='not provided')\r\n    phone_number = models.CharField(max_length=15, default='not provided')\r\n    country = CountryField(default='MA',blank=True, null=True)\r\n    bio = models.TextField(blank=True, default='No Bio provided')\r\n    email = models.EmailField(blank=True, default='No Email provided', null=True)\r\n\r\nclass Mission(models.Model):\r\n    LEVEL_CHOICES = [\r\n        ('beginner', 'Beginner'),\r\n        ('intermediate', 'Intermediate'),\r\n        ('expert', 'Expert'),\r\n    ]\r\n\r\n    CATEGORY_CHOICES = [\r\n        ('web_dev', 'Web Development'),\r\n        ('design', 'Design'),\r\n        ('writing', 'Writing'),\r\n        ('marketing', 'Marketing'),\r\n        ('other', 'other'),\r\n    ]\r\n\r\n    STATUS_CHOICES = [\r\n        ('open', 'Open'),\r\n        ('in_progress', 'In Progress'),\r\n        ('completed', 'Completed'),\r\n    ]\r\n\r\n\r\n    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='missions')\r\n\r\n    title = models.CharField(max_length=255)\r\n    description = models.TextField(blank=True)\r\n    price = models.DecimalField(max_digits=8, decimal_places=2)\r\n    category = models.CharField(max_length=255, choices=CATEGORY_CHOICES, default='other')\r\n    level = models.CharField(max_length=15, choices=LEVEL_CHOICES, default='unknown')\r\n    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='open')\r\n    created_at = models.DateTimeField(auto_now_add=True)\r\n\r\n    def get_level_badge_class(self):\r\n        return {\r\n            'beginner': 'bg-success',\r\n            'intermediate': 'bg-warning text-dark',\r\n            'expert': 'bg-danger'   ,\r\n        }.get(self.level, 'bg-secondary')\r\n\r\nclass Application(models.Model):\r\n    STATUS_CHOICES = [\r\n        ('accepted', 'Accepted'),\r\n        ('rejected', 'Rejected'),\r\n        ('none', 'None'),\r\n    ]\r\n\r\n    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='applications')\r\n    applicant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applicant')\r\n    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='none')\r\n    content = models.TextField()\r\n    created_at = models.DateTimeField(auto_now_add=True)\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/client/models.py b/client/models.py
+--- a/client/models.py	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/client/models.py	(date 1748458220791)
+@@ -2,6 +2,8 @@
+ from django.db import models
+ from django_countries.fields import CountryField
+ 
++from freelancer.models import Freelancer
++
+ 
+ # Create your models here.
+ class Client(models.Model):
+@@ -67,3 +69,12 @@
+     content = models.TextField()
+     created_at = models.DateTimeField(auto_now_add=True)
+ 
++
++class Reviews(models.Model):
++    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='mission')
++    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client')
++    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='freelancer')
++
++    content = models.TextField()
++    created_at = models.DateTimeField(auto_now_add=True)
++    review_file = models.FileField(upload_to='review_files/', null=True,blank = True)
+\ No newline at end of file
+Index: client/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.contrib.auth.models import User, Group\r\nfrom django.contrib.auth.forms import UserCreationForm\r\nfrom django.shortcuts import render, redirect, get_object_or_404\r\nfrom django.contrib.auth import login, authenticate, logout\r\nfrom django.contrib import messages\r\nfrom django.views.decorators.http import require_POST\r\n\r\nfrom client.forms import SignupForm, MissionForm, ProfileFormC\r\nfrom django.contrib.auth.decorators import login_required\r\n\r\nfrom freelancer.models import Freelancer, Service\r\nfrom .models import *\r\n\r\n\r\n# Create your views here.\r\n\r\ndef home(request):\r\n    return render(request, 'home.html')\r\n\r\n\r\ndef login_view(request):\r\n    if request.method == \"POST\":\r\n        username = request.POST['username']\r\n        password = request.POST['password']\r\n        user = authenticate(username=username, password=password)\r\n        if user is not None:\r\n            login(request, user)\r\n            user_group = request.user.groups.first()\r\n\r\n            if user_group:\r\n                if user_group.name == \"freelancer\":\r\n                    return redirect('freelancer:dashboard')\r\n                elif user_group.name == \"client\":\r\n                    return redirect('client:clientPage')\r\n\r\n            return redirect('freelancer:dashboard')\r\n\r\n        else:\r\n            error = {\"err\": \"Invalid username or password.\"}\r\n            return render(request, 'login.html', {'error': error})\r\n\r\n    else:\r\n        return render(request, 'login.html')\r\n\r\n\r\ndef signup(request):\r\n    if request.method == 'POST':\r\n        form = SignupForm(request.POST)\r\n        role = request.POST.get('role')\r\n        if form.is_valid() and role in ['freelancer', 'client']:\r\n            user = form.save(commit=False)\r\n            user.save()\r\n            group = Group.objects.get(name=role)\r\n            user.groups.add(group)\r\n\r\n            login(request, user)\r\n            messages.success(request, f\"Account created successfully as a {role}.\")\r\n            return redirect('client:login')\r\n        else:\r\n            messages.error(request, \"Please complete the form correctly.\")\r\n    else:\r\n        form = SignupForm()\r\n    return render(request, 'signup.html', {'form': form})\r\n\r\n\r\ndef logout_view(request):\r\n    if request.method == 'POST':\r\n        logout(request)\r\n        return redirect('home')\r\n\r\n    return redirect('clientPage')\r\n\r\n\r\n@login_required\r\ndef settings(request):\r\n    return render(request, 'client/settings.html')\r\n\r\n\r\n@login_required\r\ndef clientpage(request):\r\n    freelancer = Service.objects.all()\r\n    count = Service.objects.count()\r\n    return render(request, 'client/clientPage.html', {'freelancer': freelancer, 'count': count})\r\n\r\n\r\n@login_required\r\ndef profileC(request):\r\n    clientinfo = get_object_or_404(Client, user=request.user)\r\n    mission_open = Mission.objects.filter(client=clientinfo, status='open')\r\n    mission_progress = Mission.objects.filter(client=clientinfo, status='in_progress')\r\n    mission_complete = Mission.objects.filter(client=clientinfo, status='completed')\r\n\r\n    form = ProfileFormC(instance=clientinfo)  # add this line\r\n\r\n    return render(request, 'client/profileC.html', {\r\n        'clientinfo': clientinfo,\r\n        'mission_open': mission_open,\r\n        'mission_progress': mission_progress,\r\n        'mission_complete': mission_complete,\r\n        'form': form,  # pass form to template\r\n    })\r\n\r\n\r\n\r\n@login_required\r\ndef freelance_detail(request, pk):\r\n    return render(request, 'client/freelancer_detail.html')\r\n\r\n\r\n@login_required\r\ndef addMission(request):\r\n    if request.method == 'POST':\r\n        form = MissionForm(request.POST)\r\n\r\n        if form.is_valid():\r\n            mission = form.save(commit=False)\r\n            mission.client = request.user.client\r\n            mission.save()\r\n            return redirect('client:profile')\r\n        else:\r\n            print(\"Form errors:\", form.errors)  # ADD THIS LINE\r\n    else:\r\n        form = MissionForm()\r\n\r\n    return render(request, \"client/addMission.html\", {'form': form})\r\n\r\n\r\n@login_required\r\ndef acceptMission(request, pk, application_id):\r\n    mission = get_object_or_404(Mission, id=pk)\r\n    application = get_object_or_404(Application, id=application_id, mission=mission)\r\n\r\n    if request.method == 'POST':\r\n        application.status = 'accepted'\r\n        application.save()\r\n\r\n        Application.objects.filter(mission=mission).exclude(id=application.id).update(status='rejected')\r\n\r\n        mission.status = 'in_progress'\r\n        mission.save()\r\n\r\n    return redirect(\"client/profileC.html.html\")\r\n\r\n\r\n@login_required()\r\ndef rejectMission(request, pk, application_id):\r\n    application = get_object_or_404(Application, id=application_id, mission=mission)\r\n\r\n    if request.method == 'POST':\r\n        application.status = 'rejected'\r\n        application.save()\r\n\r\n    return redirect( \"client/clientPage.html\")\r\n\r\n\r\n@require_POST\r\ndef profile_edit(request):\r\n    clientinfo = get_object_or_404(Client, user=request.user)\r\n    post_data = request.POST.copy()\r\n\r\n    form = ProfileFormC(post_data, request.FILES, instance=clientinfo)\r\n\r\n    if form.is_valid():\r\n        form.save()\r\n        return redirect('client:profile')\r\n    else:\r\n        print(\"Form errors:\", form.errors)\r\n\r\n        return render(request, 'client/profileC.html', {\r\n            'clientinfo': clientinfo,\r\n            'form': form,\r\n            'form_errors': form.errors,\r\n        })\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/client/views.py b/client/views.py
+--- a/client/views.py	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/client/views.py	(date 1748458220791)
+@@ -171,3 +171,5 @@
+             'form': form,
+             'form_errors': form.errors,
+         })
++
++
+Index: freelancer/templates/freelancer/mission_detail.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends 'main.html' %}\r\n\r\n{% load humanize %}\r\n\r\n{% block nav %}\r\n    {% include \"navbar.html\" with logged_in=True search=True %}\r\n{% endblock %}\r\n\r\n{% block content %}\r\n\r\n    <div class=\"container py-4\">\r\n        <div class=\"card shadow-lg border-0 mb-4 rounded-3\">\r\n            <div class=\"card-header bg-primary text-white\">\r\n                <h3>{{ mission.title }}</h3>\r\n            </div>\r\n            <div class=\"card-body\">\r\n                <p class=\"text-muted\">Posted by: <strong>@{{ mission.client.user.username }}</strong></p>\r\n\r\n                <h5>Description</h5>\r\n                <p>{{ mission.description }}</p>\r\n\r\n                <div class=\"row mt-4\">\r\n                    <div class=\"col-md-4\">\r\n                        <p><strong>Budget:</strong> {{ mission.price }}€/Hour <span class=\"badge bg-secondary \">Hourly Rate</span>\r\n                        </p>\r\n\r\n                    </div>\r\n                    <div class=\"col-md-4\">\r\n                        <p><strong>Posted:</strong> {{ mission.created_at|date:\"d-m-Y\" }}</p>\r\n                    </div>\r\n                    <div class=\"col-md-4\">\r\n                        <p><strong>Category:</strong> {{ mission.category }}</p>\r\n                    </div>\r\n                </div>\r\n\r\n                <hr>\r\n\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\"card mt-4 shadow\">\r\n            <div class=\"card-header bg-light\">\r\n                <h5 class=\"mb-0\">Mission Applications</h5>\r\n            </div>\r\n            <div class=\"card-body\">\r\n\r\n                {% for a in applications %}\r\n                    <div class=\"d-flex mb-4\">\r\n                        <img class=\"rounded-circle shadow-sm\" src=\"{{ a.applicant.profile }}\" alt=\"avatar\">\r\n\r\n                        <div class=\"ms-3 flex-grow-1\">\r\n                            <div class=\"bg-light rounded px-3 py-2 shadow-sm\">\r\n                                <div class=\"d-flex justify-content-between\">\r\n                                    <strong>@{{ a.applicant }}</strong>\r\n                                    <small class=\"text-muted\">{{ a.created_at|naturaltime }}</small>\r\n                                    {% if mission.status == \"open\" %}\r\n                                        <form method=\"POST\" action=\"{% url 'client:accept' mission.id a.id %}\">\r\n                                            {% csrf_token %}\r\n                                            <input type=\"submit\" value=\"Accept\" name=\"accept\">\r\n\r\n                                        </form>\r\n                                        <form method=\"POST\" action=\"{% url 'client:reject' mission.id a.id %}\">\r\n                                            {% csrf_token %}\r\n                                            <input type=\"submit\" value=\"Reject\" name=\"reject\">\r\n                                        </form>\r\n                                    {% endif %}\r\n                                </div>\r\n                                <p class=\"mb-1 mt-1\">&emsp;&emsp;{{ a.content }}</p>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                {% empty %}\r\n                    <p class=\"text-muted\">No applications yet. Be the first to apply!</p>\r\n                {% endfor %}\r\n\r\n                <hr>\r\n                {% if user.groups.all.0.name == \"Freelancer\" %}\r\n                    <form method=\"POST\" action=\"\" class=\"mb-4\">\r\n                        {% csrf_token %}\r\n                        <div class=\"form-group\">\r\n                            {% if err %}\r\n                                <div class=\"alert alert-danger\" role=\"alert\">\r\n                                    {{ err }}\r\n                                </div>\r\n                            {% endif %}\r\n                            <label for=\"commentTextarea\" class=\"form-label\">Application Message</label>\r\n                            <textarea class=\"form-control\" id=\"commentTextarea\" name=\"content\" rows=\"3\"\r\n                                      placeholder=\"Write your application message...\"></textarea>\r\n                        </div>\r\n                        <button type=\"submit\" class=\"btn btn-primary mt-2\">Submit Application</button>\r\n                    </form>\r\n                {% endif %}\r\n\r\n\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/freelancer/templates/freelancer/mission_detail.html b/freelancer/templates/freelancer/mission_detail.html
+--- a/freelancer/templates/freelancer/mission_detail.html	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/freelancer/templates/freelancer/mission_detail.html	(date 1748458220900)
+@@ -53,7 +53,7 @@
+                                 <div class="d-flex justify-content-between">
+                                     <strong>@{{ a.applicant }}</strong>
+                                     <small class="text-muted">{{ a.created_at|naturaltime }}</small>
+-                                    {% if mission.status == "open" %}
++                                    {% if mission.status == "open" and user.groups.all.0.name == "Client" %}
+                                         <form method="POST" action="{% url 'client:accept' mission.id a.id %}">
+                                             {% csrf_token %}
+                                             <input type="submit" value="Accept" name="accept">
+@@ -90,6 +90,45 @@
+                         <button type="submit" class="btn btn-primary mt-2">Submit Application</button>
+                     </form>
+                 {% endif %}
++
++                <!-- Reviews Section -->
++
++                {% if mission.status == "in_progress" %}
++                    <div class="card mt-4 shadow">
++                        <div class="card-header bg-light">
++                            <h5 class="mb-0">Client Reviews</h5>
++                        </div>
++                        <div class="card-body">
++                            {% for review in reviews %}
++                                <div class="mb-3">
++                                    <strong>@{{ review.author.username }}</strong>
++                                    <small class="text-muted ms-2">{{ review.created_at|naturaltime }}</small>
++                                    <p class="mb-1 mt-1">{{ review.content }}</p>
++                                    <hr>
++                                </div>
++                            {% empty %}
++                                <p class="text-muted">No reviews yet. Be the first to leave one!</p>
++                            {% endfor %}
++
++                            {% if user.groups.all.0.name == "Client" %}
++                                <form method="POST" action="" class="mb-4">
++                                    {% csrf_token %}
++                                    <div class="form-group">
++                                        {% if err %}
++                                            <div class="alert alert-danger" role="alert">
++                                                {{ err }}
++                                            </div>
++                                        {% endif %}
++                                        <label for="commentTextarea" class="form-label">Application Message</label>
++                                        <textarea class="form-control" id="commentTextarea" name="content" rows="3"
++                                                  placeholder="Write your application message..."></textarea>
++                                    </div>
++                                    <button type="submit" class="btn btn-primary mt-2">Submit Application</button>
++                                </form>
++                            {% endif %}
++                        </div>
++                    </div>
++                {% endif %}
+ 
+ 
+             </div>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"5e03a93a-c34f-40c5-973b-1c7090546e96\" name=\"Changes\" comment=\"chat app functioning\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ProjetPython/asgi.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ProjetPython/asgi.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/chat/consumers.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/chat/consumers.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/chat/templates/chat/room.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/chat/templates/chat/room.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/chat/urls.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/chat/urls.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/chat/views.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/chat/views.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/db.sqlite3\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/db.sqlite3\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"DjangoConsoleOptions\" custom-start-script=\"import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)\">\r\n    <option name=\"myCustomStartScript\" value=\"import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"HTML File\" />\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Merge.Settings\">\r\n    <option name=\"BRANCH\" value=\"branch1\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"branch1\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;ME-Massine&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/ME-Massine/FreelanceHub.git&quot;,\r\n    &quot;accountId&quot;: &quot;bba76402-05a7-4df5-b10e-14d74a08cd0c&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2wKOSNqNU1QRInp66ltaWlVqVaz\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,\r\n    &quot;Django Server.ProjetPython.executor&quot;: &quot;Run&quot;,\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,\r\n    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrateur/PycharmProjects/FreelanceHub&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Administrateur\\PycharmProjects\\FreelanceHub\" />\r\n      <recent name=\"C:\\Users\\Administrateur\\PycharmProjects\\ProjetPython\\templates\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Administrateur\\PycharmProjects\\FreelanceHub\\media\\uploads\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"ProjetPython\" type=\"Python.DjangoServer\" factoryName=\"Django server\">\r\n      <module name=\"ProjetPython\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n        <env name=\"DJANGO_SETTINGS_MODULE\" value=\"ProjetPython.settings\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\r\n      <option name=\"port\" value=\"8000\" />\r\n      <option name=\"host\" value=\"\" />\r\n      <option name=\"additionalOptions\" value=\"\" />\r\n      <option name=\"browserUrl\" value=\"\" />\r\n      <option name=\"runTestServer\" value=\"false\" />\r\n      <option name=\"runNoReload\" value=\"false\" />\r\n      <option name=\"useCustomRunCommand\" value=\"false\" />\r\n      <option name=\"customRunCommand\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-PY-251.23774.444\" />\r\n        <option value=\"bundled-python-sdk-890ed5b35930-d9c5bdb153f4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.444\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"5e03a93a-c34f-40c5-973b-1c7090546e96\" name=\"Changes\" comment=\"\" />\r\n      <created>1745786797921</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1745786797921</updated>\r\n      <workItem from=\"1745786799047\" duration=\"5853000\" />\r\n      <workItem from=\"1745842367611\" duration=\"6228000\" />\r\n      <workItem from=\"1745913705715\" duration=\"10506000\" />\r\n      <workItem from=\"1745951295224\" duration=\"6467000\" />\r\n      <workItem from=\"1746188338270\" duration=\"3072000\" />\r\n      <workItem from=\"1746217103768\" duration=\"2530000\" />\r\n      <workItem from=\"1746378840344\" duration=\"1900000\" />\r\n      <workItem from=\"1747443257752\" duration=\"78000\" />\r\n      <workItem from=\"1747578403346\" duration=\"2407000\" />\r\n      <workItem from=\"1747592614058\" duration=\"5072000\" />\r\n      <workItem from=\"1747727163361\" duration=\"9533000\" />\r\n      <workItem from=\"1747935952219\" duration=\"6239000\" />\r\n      <workItem from=\"1747988819397\" duration=\"3712000\" />\r\n      <workItem from=\"1747996225478\" duration=\"330000\" />\r\n      <workItem from=\"1748124573885\" duration=\"10490000\" />\r\n      <workItem from=\"1748184819472\" duration=\"15850000\" />\r\n      <workItem from=\"1748213571095\" duration=\"1599000\" />\r\n      <workItem from=\"1748273206915\" duration=\"15277000\" />\r\n      <workItem from=\"1748380214036\" duration=\"176000\" />\r\n      <workItem from=\"1748431471820\" duration=\"5320000\" />\r\n      <workItem from=\"1748449201811\" duration=\"4016000\" />\r\n      <workItem from=\"1748453719349\" duration=\"3054000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Added pages\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1745795194125</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1745795194125</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"fixed the signup page\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1745801659861</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1745801659861</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"adding signup form functionality\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1745802693252</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1745802693252</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"test\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1746219697485</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1746219697485</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"gestion des roles\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1746222551211</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1746222551211</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"adding login function\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1746379511067</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1746379511067</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"Added missions cards\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1747440710224</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1747440710224</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"fixed the styling for the mission cards\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1747443029512</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1747443029512</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"added the mission application function and the commenting system\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1747948625765</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1747948625765</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"fixed the edit functionality in freelancer's profile\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748114731701</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748114731701</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"fixed the adding language functionality\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748116032998</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748116032998</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"fixed the profile UI and added the creating post functionality\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748137065691</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748137065692</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"Users can now upload their own profile picture\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748338179654</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748338179654</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00014\" summary=\"fixed the service UI\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748389843644</created>\r\n      <option name=\"number\" value=\"00014\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00014\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748389843644</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00015\" summary=\"testing a chat app\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748391883164</created>\r\n      <option name=\"number\" value=\"00015\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00015\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748391883164</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00016\" summary=\"testing a chat app\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748391914149</created>\r\n      <option name=\"number\" value=\"00016\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00016\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748391914149</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00017\" summary=\"chat app functioning\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748450144684</created>\r\n      <option name=\"number\" value=\"00017\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00017\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748450144684</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00018\" summary=\"chat app functioning\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1748450158465</created>\r\n      <option name=\"number\" value=\"00018\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00018\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1748450158465</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"19\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"CUSTOM_BOOLEAN_PROPERTIES\">\r\n                <map>\r\n                  <entry key=\"Show.Git.Branches\" value=\"true\" />\r\n                </map>\r\n              </option>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Added pages\" />\r\n    <MESSAGE value=\"fixed the signup page\" />\r\n    <MESSAGE value=\"adding signup form functionality\" />\r\n    <MESSAGE value=\"test\" />\r\n    <MESSAGE value=\"gestion des roles\" />\r\n    <MESSAGE value=\"adding login function\" />\r\n    <MESSAGE value=\"Added missions cards\" />\r\n    <MESSAGE value=\"fixed the styling for the mission cards\" />\r\n    <MESSAGE value=\"added the mission application function and the commenting system\" />\r\n    <MESSAGE value=\"fixed the edit functionality in freelancer's profile\" />\r\n    <MESSAGE value=\"fixed the adding language functionality\" />\r\n    <MESSAGE value=\"fixed the profile UI and added the creating post functionality\" />\r\n    <MESSAGE value=\"Users can now upload their own profile picture\" />\r\n    <MESSAGE value=\"fixed the service UI\" />\r\n    <MESSAGE value=\"testing a chat app\" />\r\n    <MESSAGE value=\"chat app functioning\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"chat app functioning\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" suspend=\"THREAD\" type=\"python-line\">\r\n          <url>file://$PROJECT_DIR$/freelancer/admin.py</url>\r\n          <option name=\"timeStamp\" value=\"1\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/.idea/workspace.xml	(date 1748458220789)
+@@ -4,14 +4,14 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="chat app functioning">
++    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="fixed the service UI">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ProjetPython/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/asgi.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/chat/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/consumers.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/chat/templates/chat/room.html" beforeDir="false" afterPath="$PROJECT_DIR$/chat/templates/chat/room.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/chat/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/urls.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/views.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/client/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/admin.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/client/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/models.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -24,8 +24,8 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+-        <option value="HTML File" />
+         <option value="Python Script" />
++        <option value="HTML File" />
+       </list>
+     </option>
+   </component>
+@@ -87,7 +87,6 @@
+ }</component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+-      <recent name="C:\Users\Administrateur\PycharmProjects\FreelanceHub" />
+       <recent name="C:\Users\Administrateur\PycharmProjects\ProjetPython\templates" />
+     </key>
+     <key name="MoveFile.RECENT_KEYS">
+@@ -155,9 +154,6 @@
+       <workItem from="1748213571095" duration="1599000" />
+       <workItem from="1748273206915" duration="15277000" />
+       <workItem from="1748380214036" duration="176000" />
+-      <workItem from="1748431471820" duration="5320000" />
+-      <workItem from="1748449201811" duration="4016000" />
+-      <workItem from="1748453719349" duration="3054000" />
+     </task>
+     <task id="LOCAL-00001" summary="Added pages">
+       <option name="closed" value="true" />
+@@ -271,39 +267,7 @@
+       <option name="project" value="LOCAL" />
+       <updated>1748389843644</updated>
+     </task>
+-    <task id="LOCAL-00015" summary="testing a chat app">
+-      <option name="closed" value="true" />
+-      <created>1748391883164</created>
+-      <option name="number" value="00015" />
+-      <option name="presentableId" value="LOCAL-00015" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1748391883164</updated>
+-    </task>
+-    <task id="LOCAL-00016" summary="testing a chat app">
+-      <option name="closed" value="true" />
+-      <created>1748391914149</created>
+-      <option name="number" value="00016" />
+-      <option name="presentableId" value="LOCAL-00016" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1748391914149</updated>
+-    </task>
+-    <task id="LOCAL-00017" summary="chat app functioning">
+-      <option name="closed" value="true" />
+-      <created>1748450144684</created>
+-      <option name="number" value="00017" />
+-      <option name="presentableId" value="LOCAL-00017" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1748450144684</updated>
+-    </task>
+-    <task id="LOCAL-00018" summary="chat app functioning">
+-      <option name="closed" value="true" />
+-      <created>1748450158465</created>
+-      <option name="number" value="00018" />
+-      <option name="presentableId" value="LOCAL-00018" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1748450158465</updated>
+-    </task>
+-    <option name="localTasksCounter" value="19" />
++    <option name="localTasksCounter" value="15" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -352,18 +316,6 @@
+     <MESSAGE value="fixed the profile UI and added the creating post functionality" />
+     <MESSAGE value="Users can now upload their own profile picture" />
+     <MESSAGE value="fixed the service UI" />
+-    <MESSAGE value="testing a chat app" />
+-    <MESSAGE value="chat app functioning" />
+-    <option name="LAST_COMMIT_MESSAGE" value="chat app functioning" />
+-  </component>
+-  <component name="XDebuggerManager">
+-    <breakpoint-manager>
+-      <breakpoints>
+-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+-          <url>file://$PROJECT_DIR$/freelancer/admin.py</url>
+-          <option name="timeStamp" value="1" />
+-        </line-breakpoint>
+-      </breakpoints>
+-    </breakpoint-manager>
++    <option name="LAST_COMMIT_MESSAGE" value="fixed the service UI" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Black\">\r\n    <option name=\"sdkName\" value=\"Python 3.12 (ProjetPython)\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.13 (FreelanceHub)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/.idea/misc.xml	(date 1748458312039)
+@@ -3,5 +3,5 @@
+   <component name="Black">
+     <option name="sdkName" value="Python 3.12 (ProjetPython)" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (FreelanceHub)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (FreelanceHub)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/ProjetPython.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"FacetManager\">\r\n    <facet type=\"django\" name=\"Django\">\r\n      <configuration>\r\n        <option name=\"rootFolder\" value=\"$MODULE_DIR$\" />\r\n        <option name=\"settingsModule\" value=\"ProjetPython/settings.py\" />\r\n        <option name=\"manageScript\" value=\"$MODULE_DIR$/manage.py\" />\r\n        <option name=\"environment\" value=\"&lt;map/&gt;\" />\r\n        <option name=\"doNotUseTestRunner\" value=\"false\" />\r\n        <option name=\"trackFilePattern\" value=\"migrations\" />\r\n      </configuration>\r\n    </facet>\r\n  </component>\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/.venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.13 (FreelanceHub)\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n  <component name=\"TemplatesService\">\r\n    <option name=\"TEMPLATE_CONFIGURATION\" value=\"Django\" />\r\n    <option name=\"TEMPLATE_FOLDERS\">\r\n      <list>\r\n        <option value=\"$MODULE_DIR$/../ProjetPython\\templates\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/ProjetPython.iml b/.idea/ProjetPython.iml
+--- a/.idea/ProjetPython.iml	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/.idea/ProjetPython.iml	(date 1748458312028)
+@@ -16,7 +16,7 @@
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.13 (FreelanceHub)" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 3.12 (FreelanceHub)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+   <component name="TemplatesService">
+Index: client/admin.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.contrib import admin\r\n\r\nfrom client.models import Client, Mission, Application\r\n\r\n# Register your models here.\r\nadmin.site.register(Client)\r\nadmin.site.register(Mission)\r\nadmin.site.register(Application)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/client/admin.py b/client/admin.py
+--- a/client/admin.py	(revision 3c4c35561ecc17745cc112ac766bee8972915f6f)
++++ b/client/admin.py	(date 1748458220790)
+@@ -1,8 +1,9 @@
+ from django.contrib import admin
+ 
+-from client.models import Client, Mission, Application
++from client.models import Client, Mission, Application, Reviews
+ 
+ # Register your models here.
+ admin.site.register(Client)
+ admin.site.register(Mission)
+-admin.site.register(Application)
+\ No newline at end of file
++admin.site.register(Application)
++admin.site.register(Reviews)
+\ No newline at end of file
