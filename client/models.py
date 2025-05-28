@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django_countries.fields import CountryField
 
+from freelancer.models import Freelancer
+
 
 # Create your models here.
 class Client(models.Model):
@@ -67,3 +69,12 @@ class Application(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class Reviews(models.Model):
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE, related_name='mission')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client')
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='freelancer')
+
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    review_file = models.FileField(upload_to='review_files/', null=True,blank = True)

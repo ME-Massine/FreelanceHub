@@ -26,8 +26,8 @@ def settings(request):
 
 @login_required
 def dashboard(request):
-    count = Mission.objects.count()
-    missions = Mission.objects.annotate(proposal_count=Count('applications'))
+    missions = Mission.objects.filter(status='open').annotate(proposal_count=Count('applications'))
+    count = missions.count()
 
     return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
 
