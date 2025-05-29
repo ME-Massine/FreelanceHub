@@ -70,12 +70,6 @@ def logout_view(request):
 
     return redirect('clientPage')
 
-
-@login_required
-def settings(request):
-    return render(request, 'client/settings.html')
-
-
 @login_required
 def clientpage(request):
     freelancer = Service.objects.all()
@@ -97,7 +91,7 @@ def profileC(request):
         'mission_open': mission_open,
         'mission_progress': mission_progress,
         'mission_complete': mission_complete,
-        'form': form,  # pass form to template
+        'form': form,
     })
 
 
@@ -148,7 +142,7 @@ def acceptMission(request, pk, application_id):
         mission.status = 'in_progress'
         mission.save()
 
-    return redirect("client/profileC.html.html")
+    return redirect("client/profileC.html")
 
 
 @login_required()
@@ -159,7 +153,7 @@ def rejectMission(request, pk, application_id):
         application.status = 'rejected'
         application.save()
 
-    return redirect( "client/clientPage.html")
+    return redirect( "client:clientPage.html")
 
 
 @require_POST

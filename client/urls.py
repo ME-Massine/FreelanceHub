@@ -9,7 +9,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('clientPage/', views.clientpage, name='clientPage'),
     path('profile/', views.profileC, name='profile'),
-    path('settings/', views.settings, name='settings'),
 
     path('service/<int:pk>/', views.freelance_detail, name='freelance_detail'),
     path('add-mission/', views.addMission, name='add-mission'),

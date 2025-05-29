@@ -76,9 +76,21 @@
             box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
         }
 
-        .bg-light {
-            background-color: #f0f0f0 !important;
-            color: #555 !important;
+        .mission-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background-color: #e9d8fd; /* Light purple */
+            color: #5a35a0; /* Deep purple text */
+            border-radius: 20px;
+            text-transform: capitalize;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .mission-tag:hover {
+            background-color: #d6b3f9;
+            color: #3e227a;
         }
 
     </style>
@@ -89,6 +101,15 @@
             <span class="badge badge-custom px-3 py-2">{{ count }}</span>
             <span class="text-muted">Available Missions</span>
         </h4>
+        {% if selected_category %}
+            <div class="mb-3">
+                <span class="text-muted">Filtered by category:</span>
+                <span class="badge bg-primary">{{ selected_category|capfirst }}</span>
+                <a href="{% url 'freelancer:dashboard' %}" class="ms-2 text-decoration-none text-danger">
+                    Clear filter
+                </a>
+            </div>
+        {% endif %}
 
         <div class="row g-4">
             {% for m in missions %}
@@ -133,7 +154,9 @@
 
                             <!-- Category Tag -->
                             <div class="mb-3">
-                                <span class="mission-tag">{{ m.get_category_display }}</span>
+                                <span class="mission-tag bg-category-{{ m.category }}">
+                                    {{ m.get_category_display }}
+                                </span>
                             </div>
 
                             <!-- CTA Button -->

@@ -2,14 +2,11 @@ import math
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
-from client.forms import ReviewForm, ReviewForm
+from client.forms import ReviewForm
 from client.models import Mission, Application, Reviews
-from utils.mail import send_project_proposal_notification
-from utils.remote_ai import together_query, convert_to_html_bullets
 from .models import Freelancer, Service
 
 from .forms import ApplicationForm, ProfileForm, ServiceForm
@@ -24,16 +21,23 @@ def logout_view(request):
     return redirect('clientPage')
 
 
-def settings(request):
-    return render(request, 'freelancer/settings.html')
-
 
 @login_required
 def dashboard(request):
-    missions = Mission.objects.filter(status='open').annotate(proposal_count=Count('applications'))
+    category = request.GET.get('category')
+    missions = Mission.objects.filter(status='open')
+
+    if category:
+        missions = missions.filter(category=category)
+
+    missions = missions.annotate(proposal_count=Count('applications'))
     count = missions.count()
 
-    return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
+    return render(request, 'freelancer/dashboard.html', {
+        'missions': missions,
+        'count': count,
+        'selected_category': category
+    })
 
 @login_required
 def mission_detail(request, pk):
@@ -62,18 +66,16 @@ def mission_detail(request, pk):
                 application.save()
                 return redirect('freelancer:mission_detail', pk=mission.id)
 
-    # Get latest review to determine receiver (freelancer)
     latest_review = reviews.order_by('-created_at').first()
 
     if latest_review:
-        receiver_id = latest_review.freelancer.id  # freelancer is a User object
+        receiver_id = latest_review.freelancer.id
     else:
-        # No review: fallback to accepted application(s)
         accepted_application = applications.filter(status='accepted').first()
         if accepted_application:
-            receiver_id = accepted_application.applicant.id  # applicant is User
+            receiver_id = accepted_application.applicant.id
         else:
-            receiver_id = None  # No one assigned yet
+            receiver_id = None
 
     room_name = f"mission_{mission.id}_chat"
 
@@ -121,7 +123,6 @@ def profile_edit(request):
     freelancerinfo = get_object_or_404(Freelancer, user=request.user)
     post_data = request.POST.copy()
 
-    # Use getlist to get all language codes submitted (from hidden inputs)
     lang_list = post_data.getlist('languages')
     post_data.setlist('languages', lang_list)
 
@@ -155,7 +156,7 @@ def addService(request):
 
 
 def current_missions(request):
-    freelancer = request.user  # Assuming `request.user` is the freelancer
+    freelancer = request.user
     current_applications = Application.objects.select_related('mission').filter(
         applicant=freelancer,
         status='accepted',
