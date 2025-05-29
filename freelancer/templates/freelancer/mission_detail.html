@@ -82,7 +82,7 @@
                             </div>
 
                             <!-- Form for client to add a revision ONLY on the last review -->
-                            {% if forloop.last and user.groups.all.0.name == "client" %}
+                            {% if forloop.last and user.groups.all.0.name == "client"%}
                                 <div class="mt-3">
                                     <form method="POST" action="{% url 'client:add_revision' review.id %}">
                                         {% csrf_token %}
@@ -162,11 +162,5 @@
                 </div>
             </div>
         {% endif %}
-        {% if mission.status == "in_progress" %}
-            <div class="text-center mt-4">
-                <a href="{% url 'chat:chat' room_name receiver_id %}" class="btn btn-primary">Chat with Client</a>
-            </div>
-        {% endif %}
-
     </div>
 {% endblock %}

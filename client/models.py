@@ -43,6 +43,7 @@ class Mission(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    ai_tasks = models.TextField(blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES, default='other')
     level = models.CharField(max_length=15, choices=LEVEL_CHOICES, default='unknown')
