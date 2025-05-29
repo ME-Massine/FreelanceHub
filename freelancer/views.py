@@ -35,13 +35,11 @@ def dashboard(request):
 
     return render(request, 'freelancer/dashboard.html', {'missions': missions, 'count': count})
 
-
 @login_required
 def mission_detail(request, pk):
     mission = get_object_or_404(Mission, pk=pk)
     applications = Application.objects.filter(mission=pk)
     reviews = Reviews.objects.filter(mission=mission)
-    tasks =mission.ai_tasks
     err = None
 
     # Default both forms
@@ -62,12 +60,22 @@ def mission_detail(request, pk):
                 application.mission = mission
                 application.applicant = request.user
                 application.save()
-                if send_project_proposal_notification(mission, application.applicant):
-                    messages.success(request, 'Proposal submitted successfully! Client has been notified.')
-                else:
-                    messages.success(request, 'Proposal submitted successfully!')
                 return redirect('freelancer:mission_detail', pk=mission.id)
 
+    # Get latest review to determine receiver (freelancer)
+    latest_review = reviews.order_by('-created_at').first()
+
+    if latest_review:
+        receiver_id = latest_review.freelancer.id  # freelancer is a User object
+    else:
+        # No review: fallback to accepted application(s)
+        accepted_application = applications.filter(status='accepted').first()
+        if accepted_application:
+            receiver_id = accepted_application.applicant.id  # applicant is User
+        else:
+            receiver_id = None  # No one assigned yet
+
+    room_name = f"mission_{mission.id}_chat"
 
     return render(request, 'freelancer/mission_detail.html', {
         'mission': mission,
@@ -76,7 +84,8 @@ def mission_detail(request, pk):
         'reviews': reviews,
         'application_form': application_form,
         'delivery_form': delivery_form,
-        'tasks': tasks,
+        'room_name': room_name,
+        'receiver_id': receiver_id,
     })
 
 @login_required

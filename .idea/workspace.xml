@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="unversioned Files">
-      <change afterPath="$PROJECT_DIR$/utils/mail.py" afterDir="false" />
+    <list default="true" id="5e03a93a-c34f-40c5-973b-1c7090546e96" name="Changes" comment="mail system">
+      <change beforePath="$PROJECT_DIR$/.idea/ProjetPython.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetPython.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetPython/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetPython/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/templates/freelancer/mission_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/freelancer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/freelancer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/freelancer/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/remote_ai.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/remote_ai.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +152,7 @@
       <workItem from="1748213571095" duration="1599000" />
       <workItem from="1748273206915" duration="15277000" />
       <workItem from="1748380214036" duration="176000" />
-      <workItem from="1748458290915" duration="20728000" />
+      <workItem from="1748458290915" duration="21975000" />
     </task>
     <task id="LOCAL-00001" summary="Added pages">
       <option name="closed" value="true" />
@@ -310,7 +306,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748476793936</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="mail system">
+      <option name="closed" value="true" />
+      <created>1748481380681</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1748481380681</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -364,6 +368,7 @@
     <MESSAGE value="final version of the client/freelancer page" />
     <MESSAGE value="Integrating AI to auto generate tasks for freelancer based on mission's description" />
     <MESSAGE value="unversioned Files" />
-    <option name="LAST_COMMIT_MESSAGE" value="unversioned Files" />
+    <MESSAGE value="mail system" />
+    <option name="LAST_COMMIT_MESSAGE" value="mail system" />
   </component>
 </project>

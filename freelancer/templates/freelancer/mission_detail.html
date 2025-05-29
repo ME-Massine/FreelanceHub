@@ -167,5 +167,10 @@
                 </div>
             </div>
         {% endif %}
+        {% if mission.status == "in_progress" %}
+            <div class="text-center mt-4">
+                <a href="{% url 'chat:chat' room_name receiver_id %}" class="btn btn-primary">Chat with Client</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
