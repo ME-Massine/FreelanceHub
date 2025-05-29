@@ -17,6 +17,8 @@
             <div class="card-body">
                 <p class="text-muted mb-1">Posted by: <strong>@{{ mission.client.user.username }}</strong></p>
                 <p><strong>Description:</strong> {{ mission.description }}</p>
+                <h5>AI-Extracted Tasks</h5>
+                {{ tasks|safe }}
                 <div class="row mt-3">
                     <div class="col-md-4 mb-2">
                         <strong>Budget:</strong> {{ mission.price }}€/Hour
@@ -33,79 +35,82 @@
         </div>
 
         <!-- Deliver Work Section -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">Deliver Work</h5>
-            </div>
-            <div class="card-body">
+        {% if mission.status == "in_progress" %}
+            <div class="card shadow mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Deliver Work</h5>
+                </div>
+                <div class="card-body">
 
-                {% if mission.status == "in_progress" and request.user.groups.first.name|lower == 'freelancer' %}
-                    <form method="POST" enctype="multipart/form-data"
-                          action="{% url 'freelancer:deliver_review' mission.id %}">
-                        {% csrf_token %}
-                        {{ delivery_form.as_p }}
-                        <button type="submit" class="btn btn-success">Submit Delivery</button>
-                    </form>
-                {% endif %}
-                {% if mission.status == "in_progress" %}
-                    <hr>
-                    <h5>Submitted Deliveries</h5>
-                    {% for review in mission.reviews.all|dictsort:"created_at" %}
-                        <div class="border p-3 rounded mb-4 bg-light">
-                            <p><strong>Freelancer:</strong> {{ review.freelancer.user.username }}</p>
-                            <p><strong>Submitted at:</strong> {{ review.created_at|date:"d-m-Y H:i" }}</p>
-                            <p><strong>Comment:</strong> {{ review.content }}</p>
-                            {% if review.review_file %}
-                                <p><strong>File:</strong>
-                                    <a href="{{ review.review_file.url }}" download
-                                       class="btn btn-outline-primary btn-sm">
-                                        {{ review.review_file.name|cut:"reviews/" }}
-                                    </a>
-                                </p>
-                            {% else %}
-                                <p><em>No file submitted.</em></p>
-                            {% endif %}
-
-                            <!-- Client revision comments on this delivery -->
-                            <div class="mt-3">
-                                <h6>Client Revisions</h6>
-                                {% if review.client_revisions.all %}
-                                    {% for revision in review.client_revisions.all %}
-                                        <div class="border rounded p-2 mb-2 bg-white">
-                                            <small class="text-muted">On {{ revision.created_at|date:"d-m-Y H:i" }}</small>
-                                            <p>{{ revision.comment }}</p>
-                                        </div>
-                                    {% endfor %}
+                    {% if mission.status == "in_progress" and request.user.groups.first.name|lower == 'freelancer' %}
+                        <form method="POST" enctype="multipart/form-data"
+                              action="{% url 'freelancer:deliver_review' mission.id %}">
+                            {% csrf_token %}
+                            {{ delivery_form.as_p }}
+                            <button type="submit" class="btn btn-success">Submit Delivery</button>
+                        </form>
+                    {% endif %}
+                    {% if mission.status == "in_progress" %}
+                        <hr>
+                        <h5>Submitted Deliveries</h5>
+                        {% for review in mission.reviews.all|dictsort:"created_at" %}
+                            <div class="border p-3 rounded mb-4 bg-light">
+                                <p><strong>Freelancer:</strong> {{ review.freelancer.user.username }}</p>
+                                <p><strong>Submitted at:</strong> {{ review.created_at|date:"d-m-Y H:i" }}</p>
+                                <p><strong>Comment:</strong> {{ review.content }}</p>
+                                {% if review.review_file %}
+                                    <p><strong>File:</strong>
+                                        <a href="{{ review.review_file.url }}" download
+                                           class="btn btn-outline-primary btn-sm">
+                                            {{ review.review_file.name|cut:"reviews/" }}
+                                        </a>
+                                    </p>
                                 {% else %}
-                                    <p class="text-muted"><em>No revisions added yet.</em></p>
+                                    <p><em>No file submitted.</em></p>
+                                {% endif %}
+
+                                <!-- Client revision comments on this delivery -->
+                                <div class="mt-3">
+                                    <h6>Client Revisions</h6>
+                                    {% if review.client_revisions.all %}
+                                        {% for revision in review.client_revisions.all %}
+                                            <div class="border rounded p-2 mb-2 bg-white">
+                                                <small class="text-muted">On {{ revision.created_at|date:"d-m-Y H:i" }}</small>
+                                                <p>{{ revision.comment }}</p>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="text-muted"><em>No revisions added yet.</em></p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Form for client to add a revision ONLY on the last review -->
+                                {% if forloop.last and user.groups.all.0.name == "client" %}
+                                    <div class="mt-3">
+                                        <form method="POST" action="{% url 'client:add_revision' review.id %}">
+                                            {% csrf_token %}
+                                            <div class="mb-2">
+                                                <label for="revisionTextarea-{{ review.id }}" class="form-label">Add a
+                                                    revision/comment</label>
+                                                <textarea class="form-control" id="revisionTextarea-{{ review.id }}"
+                                                          name="comment" rows="3"
+                                                          placeholder="Write your revision or feedback here..."
+                                                          required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit Revision
+                                            </button>
+                                        </form>
+                                    </div>
                                 {% endif %}
                             </div>
+                        {% empty %}
+                            <p class="text-muted">No reviews submitted yet.</p>
+                        {% endfor %}
+                    {% endif %}
 
-                            <!-- Form for client to add a revision ONLY on the last review -->
-                            {% if forloop.last and user.groups.all.0.name == "client"%}
-                                <div class="mt-3">
-                                    <form method="POST" action="{% url 'client:add_revision' review.id %}">
-                                        {% csrf_token %}
-                                        <div class="mb-2">
-                                            <label for="revisionTextarea-{{ review.id }}" class="form-label">Add a
-                                                revision/comment</label>
-                                            <textarea class="form-control" id="revisionTextarea-{{ review.id }}"
-                                                      name="comment" rows="3"
-                                                      placeholder="Write your revision or feedback here..."
-                                                      required></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-sm">Submit Revision</button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% empty %}
-                        <p class="text-muted">No reviews submitted yet.</p>
-                    {% endfor %}
-                {% endif %}
-
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         {% if mission.status != "in_progress" %}
             <!-- Mission Applications -->
@@ -144,7 +149,7 @@
                         <p class="text-muted">No applications yet. Be the first to apply!</p>
                     {% endfor %}
 
-                    {% if user.groups.all.0.name == "Freelancer" %}
+                    {% if user.groups.all.0.name == "freelancer" %}
                         <hr>
                         <form method="POST" action="" class="mt-3">
                             {% csrf_token %}

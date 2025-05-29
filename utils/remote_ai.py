@@ -34,17 +34,12 @@ def together_query(prompt, temperature=0.7, max_tokens=512):
 
 
 def convert_to_html_bullets(text):
-    # Replace numbered bullets (e.g., "1 •") with just bullet marks, if needed
-    # (Optional; your AI response probably doesn't have numbers now)
     text = re.sub(r'(\d+)\s*[\*•]', r'\n*', text)
 
-    # Split by bullet marker '*'
     bullet_points = re.split(r'\*', text)
 
-    # Clean up each point, remove empty strings
     cleaned_points = [point.strip() for point in bullet_points if point.strip()]
 
-    # Wrap each point in <li>
     html_bullets = ''.join(f'<li>{point}</li>' for point in cleaned_points)
 
     # Wrap all in <ul>

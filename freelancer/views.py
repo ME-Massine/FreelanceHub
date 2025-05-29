@@ -2,11 +2,14 @@ import math
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from client.forms import ReviewForm, ReviewForm
 from client.models import Mission, Application, Reviews
+from utils.mail import send_project_proposal_notification
+from utils.remote_ai import together_query, convert_to_html_bullets
 from .models import Freelancer, Service
 
 from .forms import ApplicationForm, ProfileForm, ServiceForm
@@ -38,6 +41,7 @@ def mission_detail(request, pk):
     mission = get_object_or_404(Mission, pk=pk)
     applications = Application.objects.filter(mission=pk)
     reviews = Reviews.objects.filter(mission=mission)
+    tasks =mission.ai_tasks
     err = None
 
     # Default both forms
@@ -58,7 +62,12 @@ def mission_detail(request, pk):
                 application.mission = mission
                 application.applicant = request.user
                 application.save()
+                if send_project_proposal_notification(mission, application.applicant):
+                    messages.success(request, 'Proposal submitted successfully! Client has been notified.')
+                else:
+                    messages.success(request, 'Proposal submitted successfully!')
                 return redirect('freelancer:mission_detail', pk=mission.id)
+
 
     return render(request, 'freelancer/mission_detail.html', {
         'mission': mission,
@@ -67,6 +76,7 @@ def mission_detail(request, pk):
         'reviews': reviews,
         'application_form': application_form,
         'delivery_form': delivery_form,
+        'tasks': tasks,
     })
 
 @login_required

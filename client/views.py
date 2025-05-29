@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -9,6 +8,7 @@ from client.forms import SignupForm, MissionForm, ProfileFormC
 from django.contrib.auth.decorators import login_required
 
 from freelancer.models import Freelancer, Service
+from utils.remote_ai import together_query, convert_to_html_bullets
 from .models import *
 
 
@@ -116,8 +116,14 @@ def addMission(request):
         form = MissionForm(request.POST)
 
         if form.is_valid():
+            description = form.cleaned_data['description']
+
+            prompt = description + " Respond only with concise bullet points — no paragraphs, no explanations, no code blocks, no numbering. Just plain bullet points, separated with *"
+            raw_response = together_query(prompt)
+            response = convert_to_html_bullets(raw_response)
             mission = form.save(commit=False)
             mission.client = request.user.client
+            mission.ai_tasks = response
             mission.save()
             return redirect('client:profile')
         else:
