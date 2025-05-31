@@ -31,7 +31,7 @@
 
 ## 📁 Project Structure
 
-```plaintext
+\`\`\`plaintext
 FreelanceHub/
 ├── client/            # Client-side views and logic
 ├── freelancer/        # Freelancer-side views and logic
@@ -43,18 +43,21 @@ FreelanceHub/
 ├── db.sqlite3         # SQLite development database
 ├── manage.py          # Django management script
 └── .env               # Environment variables
-```
+\`\`\`
 
-🧑‍💻 Getting Started
-Prerequisites
+---
 
-    Python 3.10+
+## 🧑‍💻 Getting Started
 
-    pip
+### Prerequisites
 
-    virtualenv (recommended)
+- Python 3.10+  
+- pip  
+- virtualenv (recommended)  
 
-Installation
+### Installation
+
+\`\`\`bash
 git clone https://github.com/ME-Massine/FreelanceHub.git
 cd FreelanceHub
 python -m venv venv
@@ -62,28 +65,46 @@ source venv/bin/activate      # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
+\`\`\`
 
-Then open your browser and go to:
+Then open your browser and go to:  
+\`\`\`
 http://127.0.0.1:8000/
+\`\`\`
 
-📸 Screenshots
+---
 
-Coming soon...
+## 📸 Screenshots
 
-🧩 To-Do
+_Coming soon..._
 
-Add user authentication with roles
+---
 
-Enhance messaging with notifications
+## 🧩 To-Do
 
-Integrate payment gateways
+- [ ] Add user authentication with roles  
+- [ ] Enhance messaging with notifications  
+- [ ] Integrate payment gateways  
+- [ ] Add project recommendation engine using AI  
+- [ ] Write unit and integration tests  
 
-Add project recommendation engine using AI
+---
 
-Write unit and integration tests
+## 📜 License
 
+This project is licensed under the **MIT License**.  
+See the [LICENSE](LICENSE) file for details.
 
-🤝 Contributing
+---
 
-Pull requests are welcome!
+## 🤝 Contributing
+
+Pull requests are welcome!  
 For major changes, please open an issue first to discuss what you'd like to change.
+
+---
+
+## 👨‍💻 Author
+
+**ME Massine**  
+GitHub: [@ME-Massine](https://github.com/ME-Massine)  
