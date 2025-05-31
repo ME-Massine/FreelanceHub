@@ -55,3 +55,35 @@ Prerequisites
     virtualenv (recommended)
 
 Installation
+git clone https://github.com/ME-Massine/FreelanceHub.git
+cd FreelanceHub
+python -m venv venv
+source venv/bin/activate      # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+Then open your browser and go to:
+http://127.0.0.1:8000/
+
+📸 Screenshots
+
+Coming soon...
+
+🧩 To-Do
+
+Add user authentication with roles
+
+Enhance messaging with notifications
+
+Integrate payment gateways
+
+Add project recommendation engine using AI
+
+Write unit and integration tests
+
+
+🤝 Contributing
+
+Pull requests are welcome!
+For major changes, please open an issue first to discuss what you'd like to change.
