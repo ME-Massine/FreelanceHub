@@ -61,10 +61,14 @@ FreelanceHub/
 git clone https://github.com/ME-Massine/FreelanceHub.git
 cd FreelanceHub
 python -m venv venv
+```
 # On macOS/Linux:
+```
 source venv/bin/activate
+```
 # On Windows:
-# venv\Scripts\activate
+```
+venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
