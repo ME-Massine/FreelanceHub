@@ -43,6 +43,7 @@ FreelanceHub/
 ├── db.sqlite3         # SQLite development database
 ├── manage.py          # Django management script
 └── .env               # Environment variables
+```
 
 🧑‍💻 Getting Started
 Prerequisites
