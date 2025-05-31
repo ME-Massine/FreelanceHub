@@ -6,12 +6,12 @@
 
 ## 🚀 Features
 
-- 👤 **User Roles**: Separate dashboards for Freelancers and Clients.
-- 📄 **Project Listings**: Clients can post projects and manage applications.
-- 💬 **Real-Time Chat**: Enables secure communication between freelancers and clients.
-- 🔍 **Freelancer Discovery**: Smart filters to browse and hire based on skills, ratings, and availability.
-- 📁 **Profile Management**: Customizable profiles with portfolios, skills, and bio.
-- 📊 **Dashboard Analytics**: Overview of active projects, applications, and earnings.
+- 👤 **User Roles**: Separate dashboards for Freelancers and Clients.  
+- 📄 **Project Listings**: Clients can post projects and manage applications.  
+- 💬 **Real-Time Chat**: Enables secure communication between freelancers and clients.  
+- 🔍 **Freelancer Discovery**: Smart filters to browse and hire based on skills, ratings, and availability.  
+- 📁 **Profile Management**: Customizable profiles with portfolios, skills, and bio.  
+- 📊 **Dashboard Analytics**: Overview of active projects, applications, and earnings.  
 - 📎 **Media Uploads**: Freelancers can attach samples or proposals to job applications.
 
 ---
@@ -30,36 +30,27 @@
 ---
 
 ## 📁 Project Structure
+
+```plaintext
 FreelanceHub/
-├── client/ # Client-side views and logic
-├── freelancer/ # Freelancer-side views and logic
-├── chat/ # Messaging functionality
-├── templates/ # HTML templates
-├── media/ # Uploaded files and assets
-├── utils/ # Utility modules
-├── ProjetPython/ # Shared Python logic
-├── db.sqlite3 # SQLite development database
-├── manage.py # Django management script
-└── .env # Environment variables
+├── client/            # Client-side views and logic
+├── freelancer/        # Freelancer-side views and logic
+├── chat/              # Messaging functionality
+├── templates/         # HTML templates
+├── media/             # Uploaded files and assets
+├── utils/             # Utility modules
+├── ProjetPython/      # Shared Python logic
+├── db.sqlite3         # SQLite development database
+├── manage.py          # Django management script
+└── .env               # Environment variables
 
----
+🧑‍💻 Getting Started
+Prerequisites
 
-## 🧑‍💻 Getting Started
+    Python 3.10+
 
-### Prerequisites
+    pip
 
-- Python 3.10+
-- pip
-- virtualenv (recommended)
+    virtualenv (recommended)
 
-### Installation
-
-```bash
-git clone https://github.com/ME-Massine/FreelanceHub.git
-cd FreelanceHub
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-
+Installation
