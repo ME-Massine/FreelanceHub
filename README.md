@@ -86,11 +86,11 @@ http://127.0.0.1:8000/
 
 Below are some key screens from FreelanceHub:
 
-### Current Missions
-![Current Missions](assets/CurrentMissions.png)
-
 ### Freelancer Dashboard
 ![Freelancer Dashboard](assets/FreelancerDashboard.png)
+
+### Current Missions
+![Current Missions](assets/CurrentMissions.png)
 
 ### Mission Progress
 ![Mission Progress](assets/MissionProgress.png)
