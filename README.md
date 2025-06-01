@@ -31,7 +31,7 @@
 
 ## 📁 Project Structure
 
-\`\`\`plaintext
+```plaintext
 FreelanceHub/
 ├── client/            # Client-side views and logic
 ├── freelancer/        # Freelancer-side views and logic
@@ -43,7 +43,7 @@ FreelanceHub/
 ├── db.sqlite3         # SQLite development database
 ├── manage.py          # Django management script
 └── .env               # Environment variables
-\`\`\`
+```
 
 ---
 
