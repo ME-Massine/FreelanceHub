@@ -112,6 +112,13 @@ For major changes, please open an issue first to discuss what you'd like to chan
 
 ---
 
+## 👥 Collaborators
+
+- [MsdAmine](https://github.com/MsdAmine)  
+- [sidkizh04](https://github.com/sidkizh04)  
+
+---
+
 ## 👨‍💻 Author
 
 **ME Massine**  
