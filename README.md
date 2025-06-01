@@ -84,7 +84,16 @@ http://127.0.0.1:8000/
 
 ## 📸 Screenshots
 
-_Coming soon..._
+Below are some key screens from FreelanceHub:
+
+### Current Missions
+![Current Missions](assets/CurrentMissions.png)
+
+### Freelancer Dashboard
+![Freelancer Dashboard](assets/FreelancerDashboard.png)
+
+### Mission Progress
+![Mission Progress](assets/MissionProgress.png)
 
 ---
 
