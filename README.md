@@ -42,6 +42,7 @@ FreelanceHub/
 ├── ProjetPython/      # Shared Python logic
 ├── db.sqlite3         # SQLite development database
 ├── manage.py          # Django management script
+├── requirements.txt   # Python dependencies
 └── .env               # Environment variables
 ```
 
