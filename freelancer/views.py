@@ -156,18 +156,36 @@ def addService(request):
 
 
 def current_missions(request):
-    freelancer = request.user
-    current_applications = Application.objects.select_related('mission').filter(
-        applicant=freelancer,
-        status='accepted',
-        mission__status='in_progress'
-    )
+    user = request.user
+    group = user.groups.first().name if user.groups.exists() else None
 
-    return render(request, 'freelancer/current_missions.html', {
-        'applications': current_applications
-    })
+    if group == 'freelancer':
+        # Show missions the freelancer is working on
+        current_applications = Application.objects.select_related('mission').filter(
+            applicant=user,
+            status='accepted',
+            mission__status='in_progress'
+        )
+        return render(request, 'freelancer/current_missions.html', {
+            'applications': current_applications,
+            'user_role': 'freelancer'
+        })
 
+    elif group == 'client':
+        # Show missions posted by the client that are in progress
+        current_missions = Mission.objects.prefetch_related('applications').filter(
+            client=user.client_profile,  # Adjust if your model is different
+            status='in_progress'
+        )
+        return render(request, 'freelancer/current_missions.html', {
+            'missions': current_missions,
+            'user_role': 'client'
+        })
 
+    else:
+        return render(request, 'freelancer/current_missions.html', {
+            'error': "Unauthorized user type."
+        })
 def deliver_review(request, mission_id):
     mission = get_object_or_404(Mission, id=mission_id)
 
@@ -176,7 +194,7 @@ def deliver_review(request, mission_id):
         if form.is_valid():
             review = form.save(commit=False)
             review.mission = mission
-            review.freelancer = request.user.freelancer
+            review.freelancer = request.user
             review.client = mission.client
             review.save()
             return redirect('freelancer:mission_detail', pk=mission.id)

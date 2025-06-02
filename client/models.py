@@ -8,7 +8,7 @@ from freelancer.models import Freelancer
 # Create your models here.
 class Client(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='client_profile')
 
     pfp = models.ImageField(upload_to='uploads/', default='uploads/default.jpg')
     company_name = models.CharField(max_length=255, default='not provided')

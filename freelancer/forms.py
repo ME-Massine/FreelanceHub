@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import CheckboxSelectMultiple, SelectMultiple
 from multiselectfield import MultiSelectFormField
 
 from freelancer.models import Freelancer, Service

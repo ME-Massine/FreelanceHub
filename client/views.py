@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from client.forms import SignupForm, MissionForm, ProfileFormC
 from django.contrib.auth.decorators import login_required
 
-from freelancer.models import Freelancer, Service
+from freelancer.models import Service
 from utils.remote_ai import together_query, convert_to_html_bullets
 from .models import *
 
@@ -70,6 +70,7 @@ def logout_view(request):
 
     return redirect('clientPage')
 
+
 @login_required
 def clientpage(request):
     freelancer = Service.objects.all()
@@ -95,13 +96,11 @@ def profileC(request):
     })
 
 
-
 @login_required
 def freelance_detail(request, pk):
     service = get_object_or_404(Service, pk=pk)
 
-
-    return render(request, 'client/freelancer_detail.html',{'service': service})
+    return render(request, 'client/freelancer_detail.html', {'service': service})
 
 
 @login_required
@@ -153,7 +152,7 @@ def rejectMission(request, pk, application_id):
         application.status = 'rejected'
         application.save()
 
-    return redirect( "client:clientPage.html")
+    return redirect("client:clientPage.html")
 
 
 @require_POST
@@ -187,7 +186,5 @@ def add_revision(request, review_id):
                 comment=comment,
                 author=request.user,
             )
-        return redirect('mission_detail', mission_id=review.mission.id)
-    return redirect('mission_detail', mission_id=review.mission.id)
-
-
+        return redirect('freelancer:mission_detail', pk=review.mission.id)
+    return redirect('mission_detail', pk=review.mission.id)
